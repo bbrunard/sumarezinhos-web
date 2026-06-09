@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+.auth-page { min-height: calc(100vh - 72px); background: linear-gradient(160deg,#FFF0F5 0%,#FAF0E0 100%); display: flex; align-items: center; justify-content: center; padding: 40px 20px; font-family: 'Nunito', sans-serif; }
+.auth-card { background: #fff; border: 2px solid #F2C4CE; border-radius: 28px; padding: 40px; width: 100%; max-width: 420px; text-align: center; }
+.auth-logo { font-size: 52px; margin-bottom: 10px; }
+h1 { font-family: 'Fredoka One', cursive; font-size: 28px; color: #7A5C4E; margin: 0 0 6px; }
+.auth-sub { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0 0 20px; }
+.tipo-selector { display: flex; gap: 8px; margin-bottom: 20px; button { flex: 1; padding: 10px; border: 2px solid #F2C4CE; border-radius: 14px; background: #fff; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; color: #7A5C4E; cursor: pointer; transition: .2s; &.active { background: #D98EA0; color: #fff; border-color: #D98EA0; } } }
+.field { text-align: left; margin-bottom: 14px; label { display: block; font-size: 13px; font-weight: 800; color: #7A5C4E; margin-bottom: 5px; } input { width: 100%; box-sizing: border-box; border: 2px solid #F2C4CE; border-radius: 12px; padding: 11px 14px; font-family: 'Nunito', sans-serif; font-size: 14px; color: #7A5C4E; &:focus { outline: none; border-color: #D98EA0; } } }
+.error-msg { background: #FCEBEB; border: 1px solid #F7C1C1; color: #a32d2d; padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+.success-msg { background: #F0FFF0; border: 1px solid #B8D9C0; color: #3a6b4a; padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+.btn-primary { width: 100%; box-sizing: border-box; background: #D98EA0; color: #fff; border: none; padding: 14px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 3px 0 #B57080; transition: .1s; margin-bottom: 14px; &:disabled { opacity: .6; cursor: not-allowed; } &:hover:not(:disabled) { transform: translateY(-1px); } }
+.auth-link { font-size: 13px; color: #C9A89A; font-weight: 600; a { color: #D98EA0; font-weight: 800; text-decoration: none; &:hover { text-decoration: underline; } } }

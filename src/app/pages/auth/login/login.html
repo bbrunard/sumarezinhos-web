@@ -1,0 +1,24 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🐾</div>
+    <h1>Bem-vindo(a) de volta!</h1>
+    <p class="auth-sub">Entre na sua conta Sumarézinhos</p>
+
+    <div class="field">
+      <label>E-mail</label>
+      <input type="email" [(ngModel)]="email" placeholder="seu@email.com" (keyup.enter)="login()">
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" [(ngModel)]="senha" placeholder="Sua senha" (keyup.enter)="login()">
+    </div>
+
+    <div class="error-msg" *ngIf="erro">⚠ {{ erro }}</div>
+
+    <button class="btn-primary" (click)="login()" [disabled]="loading">
+      {{ loading ? '⏳ Entrando...' : 'Entrar 🐾' }}
+    </button>
+
+    <p class="auth-link">Ainda não tem conta? <a routerLink="/auth/cadastrar">Crie agora, é grátis!</a></p>
+  </div>
+</div>

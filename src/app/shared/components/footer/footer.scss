@@ -1,0 +1,16 @@
+.footer {
+  background: #7A5C4E; padding: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 20px; font-family: 'Nunito', sans-serif;
+}
+.footer-logo {
+  font-family: 'Fredoka One', cursive; font-size: 22px; color: #fff;
+  span { color: #F2C4CE; }
+}
+.footer-brand p { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 4px; font-weight: 600; }
+.footer-links {
+  display: flex; gap: 20px;
+  a { font-size: 13px; color: rgba(255,255,255,.75); text-decoration: none; font-weight: 700;
+      &:hover { color: #F2C4CE; } }
+}
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 600; width: 100%; text-align: center; margin-top: 8px; }

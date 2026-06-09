@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+.page { padding: 40px 60px; background: #FDF6EC; min-height: calc(100vh - 72px); font-family: 'Nunito', sans-serif; }
+.back-btn { color: #D98EA0; font-weight: 700; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 24px; &:hover { text-decoration: underline; } }
+.loading, .erro { text-align: center; padding: 60px; font-size: 18px; color: #C9A89A; font-weight: 700; }
+.detail-grid { display: grid; grid-template-columns: 380px 1fr; gap: 40px; }
+.detail-img { height: 320px; background: #FFF0F5; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 120px; position: relative; border: 2px solid #F2C4CE; }
+.status-badge { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: #D98EA0; color: #fff; font-size: 12px; font-weight: 800; padding: 6px 20px; border-radius: 20px; white-space: nowrap; &.disponivel { background: #D98EA0; } }
+.protetor-card { margin-top: 16px; background: #fff; border: 2px solid #F2C4CE; border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+.protetor-avatar { font-size: 28px; }
+.protetor-card strong { font-size: 15px; color: #7A5C4E; display: block; }
+.protetor-card p { font-size: 13px; color: #C9A89A; margin: 0; font-weight: 600; }
+h1 { font-family: 'Fredoka One', cursive; font-size: 40px; color: #7A5C4E; margin: 0 0 24px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.info-item { background: #fff; border: 1px solid #F2C4CE; border-radius: 12px; padding: 10px 14px; }
+.label { display: block; font-size: 11px; color: #C9A89A; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.info-item span:last-child { font-size: 14px; font-weight: 700; color: #7A5C4E; }
+.descricao { background: #fff; border: 2px solid #F2C4CE; border-radius: 16px; padding: 20px; margin-bottom: 24px; h3 { font-family: 'Fredoka One', cursive; font-size: 20px; color: #7A5C4E; margin: 0 0 10px; } p { font-size: 14px; color: #7A5C4E; line-height: 1.7; font-weight: 600; margin: 0; } }
+.adocao-form { background: #fff; border: 2px solid #F2C4CE; border-radius: 20px; padding: 24px; h3 { font-family: 'Fredoka One', cursive; font-size: 22px; color: #7A5C4E; margin: 0 0 8px; } p { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0 0 14px; } }
+textarea { width: 100%; border: 2px solid #F2C4CE; border-radius: 12px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 14px; color: #7A5C4E; resize: vertical; &:focus { outline: none; border-color: #D98EA0; } }
+.char-count { text-align: right; font-size: 12px; color: #C9A89A; font-weight: 600; margin: 4px 0 12px; }
+.btn-primary { display: inline-block; background: #D98EA0; color: #fff; border: none; padding: 13px 28px; border-radius: 24px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; cursor: pointer; text-decoration: none; box-shadow: 0 3px 0 #B57080; transition: .1s; &:disabled { opacity: .6; cursor: not-allowed; } &:hover:not(:disabled) { transform: translateY(-2px); } }
+.btn-secondary { display: inline-block; background: #fff; color: #7A5C4E; border: 2px solid #D98EA0; padding: 12px 24px; border-radius: 24px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; cursor: pointer; text-decoration: none; margin-left: 10px; }
+.success-msg { color: #3a6b4a; background: #F0FFF0; border: 1px solid #B8D9C0; padding: 10px 14px; border-radius: 12px; margin-top: 12px; font-weight: 700; font-size: 13px; }
+.error-msg { color: #a32d2d; background: #FCEBEB; border: 1px solid #F7C1C1; padding: 10px 14px; border-radius: 12px; margin-top: 12px; font-weight: 700; font-size: 13px; }
+.login-cta { text-align: center; padding: 16px 0; p { margin-bottom: 16px; } }
+@media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; } .page { padding: 32px 20px; } }

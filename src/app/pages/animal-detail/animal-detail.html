@@ -1,0 +1,62 @@
+<div class="page">
+  <a routerLink="/animais" class="back-btn">← Voltar</a>
+
+  <div *ngIf="loading" class="loading">🐾 Carregando...</div>
+  <div *ngIf="erro && !loading" class="erro">{{ erro }}</div>
+
+  <div class="detail-grid" *ngIf="animal && !loading">
+    <div class="detail-img-col">
+      <div class="detail-img">
+        <span>{{ emoji }}</span>
+        <span class="status-badge" [class.disponivel]="animal.status === 'Disponivel'">
+          {{ animal.status === 'Disponivel' ? 'Disponível para adoção' : animal.status }}
+        </span>
+      </div>
+      <div class="protetor-card">
+        <div class="protetor-avatar">🤝</div>
+        <div>
+          <strong>{{ animal.nomeProtetor }}</strong>
+          <p>{{ animal.telefoneProtetor }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-info-col">
+      <h1>{{ animal.nome }}</h1>
+      <div class="info-grid">
+        <div class="info-item"><span class="label">Espécie</span><span>{{ animal.especie === 'Cao' ? 'Cão' : animal.especie }}</span></div>
+        <div class="info-item"><span class="label">Porte</span><span>{{ animal.porte }}</span></div>
+        <div class="info-item"><span class="label">Sexo</span><span>{{ animal.sexo === 'M' ? 'Macho' : 'Fêmea' }}</span></div>
+        <div class="info-item"><span class="label">Idade</span><span>{{ idadeLabel }}</span></div>
+        <div class="info-item"><span class="label">Castrado</span><span>{{ animal.castrado ? '✅ Sim' : '❌ Não' }}</span></div>
+        <div class="info-item"><span class="label">Vacinado</span><span>{{ animal.vacinado ? '✅ Sim' : '❌ Não' }}</span></div>
+      </div>
+
+      <div class="descricao">
+        <h3>Sobre mim 🐾</h3>
+        <p>{{ animal.descricao }}</p>
+      </div>
+
+      <div class="adocao-form" *ngIf="animal.status === 'Disponivel'">
+        <ng-container *ngIf="auth.isLoggedIn(); else naoLogado">
+          <h3>Quero adotar! 💌</h3>
+          <p>Conte ao protetor por que você é o lar ideal para {{ animal.nome }}:</p>
+          <textarea [(ngModel)]="motivacao" rows="4" placeholder="Me apaixonei pelo(a) {{ animal.nome }} porque..." maxlength="500"></textarea>
+          <div class="char-count">{{ motivacao.length }}/500</div>
+          <button class="btn-primary" (click)="solicitar()" [disabled]="enviando || motivacao.length < 20">
+            {{ enviando ? '⏳ Enviando...' : 'Enviar solicitação 🐾' }}
+          </button>
+          <div class="success-msg" *ngIf="sucesso">🎉 {{ mensagem }}</div>
+          <div class="error-msg" *ngIf="erro">⚠ {{ erro }}</div>
+        </ng-container>
+        <ng-template #naoLogado>
+          <div class="login-cta">
+            <p>Para solicitar a adoção, você precisa ter uma conta.</p>
+            <a routerLink="/auth/login" class="btn-primary">Entrar na minha conta</a>
+            <a routerLink="/auth/cadastrar" class="btn-secondary">Criar conta grátis</a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

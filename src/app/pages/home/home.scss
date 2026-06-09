@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero {
+  background: linear-gradient(160deg, #FFF0F5 0%, #FAF0E0 60%, #F0EDE4 100%);
+  padding: 60px 60px 0; display: flex; align-items: center; gap: 40px;
+  min-height: 500px; overflow: hidden; font-family: 'Nunito', sans-serif;
+}
+.hero-text { flex: 1; z-index: 2; }
+.hero-tag {
+  display: inline-block; background: #F2C4CE; color: #7A5C4E;
+  font-size: 12px; font-weight: 800; padding: 5px 16px; border-radius: 20px;
+  margin-bottom: 14px; letter-spacing: .5px;
+}
+h1 {
+  font-family: 'Fredoka One', cursive; font-size: 52px; color: #7A5C4E;
+  line-height: 1.1; margin: 0 0 16px;
+  .highlight { color: #D98EA0; }
+}
+.hero-sub { font-size: 15px; color: #C9A89A; line-height: 1.7; max-width: 380px; margin-bottom: 28px; font-weight: 600; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-art { flex: 1; position: relative; height: 380px; display: flex; align-items: flex-end; justify-content: center; }
+.hero-main-img {
+  width: 200px; height: 200px; border-radius: 50%; background: #F2C4CE;
+  display: flex; align-items: center; justify-content: center; font-size: 80px;
+  border: 5px solid #fff; box-shadow: 0 8px 32px rgba(200,140,160,.25); z-index: 1;
+  animation: floaty 3s ease-in-out infinite;
+}
+.float-card {
+  position: absolute; background: #fff; border: 2px solid #F2C4CE; border-radius: 20px;
+  padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 700; color: #7A5C4E;
+  animation: floaty 3s ease-in-out infinite;
+  &:nth-child(3) { animation-delay: 1s; }
+  small { font-size: 11px; color: #C9A89A; font-weight: 400; }
+}
+.fc-dot { font-size: 28px; }
+@keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.stats-bar {
+  background: #D98EA0; padding: 20px 60px;
+  display: flex; justify-content: space-around; flex-wrap: wrap; gap: 16px;
+}
+.stat { text-align: center; }
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 28px; color: #fff; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,.8); font-weight: 700; letter-spacing: .5px; font-family: 'Nunito', sans-serif; }
+
+.sec { padding: 60px; background: #FDF6EC; font-family: 'Nunito', sans-serif; }
+.testi-sec { background: #FAF0E0; }
+.sec-header { text-align: center; margin-bottom: 40px; }
+.sec-tag {
+  display: inline-block; background: #fff; border: 2px solid #7A5C4E;
+  border-radius: 30px; padding: 6px 20px; font-family: 'Fredoka One', cursive;
+  font-size: 16px; color: #7A5C4E; margin-bottom: 16px;
+  &.dark { background: rgba(255,255,255,.9); }
+}
+h2 { font-family: 'Fredoka One', cursive; font-size: 36px; color: #7A5C4E; margin: 0 0 8px; }
+.sec-header p { font-size: 14px; color: #C9A89A; font-weight: 600; }
+
+.loading-paws { text-align: center; font-size: 18px; padding: 40px; color: #C9A89A; font-family: 'Nunito', sans-serif; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.sec-footer { text-align: center; margin-top: 32px; }
+
+.cloud-sec {
+  background: #F2C4CE; padding: 70px 60px; position: relative; overflow: hidden;
+}
+.cloud {
+  position: absolute; background: rgba(255,255,255,.55); border-radius: 50%;
+  &.c1{width:140px;height:90px;top:-30px;left:5%}
+  &.c2{width:200px;height:120px;top:-40px;left:22%}
+  &.c3{width:110px;height:70px;top:-20px;left:40%}
+  &.c4{width:220px;height:130px;top:-45px;right:8%}
+}
+.cloud-inner { position: relative; z-index: 2; text-align: center; }
+.cloud-inner p { font-size: 14px; color: #7A5C4E; font-weight: 600; max-width: 520px; margin: 0 auto 32px; line-height: 1.7; font-family: 'Nunito', sans-serif; }
+.steps-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.step-card {
+  background: #fff; border: 3px solid #7A5C4E; border-radius: 20px;
+  padding: 24px 20px; width: 190px; text-align: center; font-family: 'Nunito', sans-serif;
+}
+.step-icon { font-size: 36px; margin-bottom: 10px; }
+.step-num { font-family: 'Fredoka One', cursive; font-size: 14px; color: #D98EA0; margin-bottom: 8px; }
+.step-card p { font-size: 13px; font-weight: 700; color: #7A5C4E; line-height: 1.5; margin: 0; }
+
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 320px));
+  gap: 16px;
+  justify-content: center;
+}
+.testi-card { background: #fff; border: 2px solid #F2C4CE; border-radius: 20px; padding: 20px; font-family: 'Nunito', sans-serif; }
+.testi-avatar {
+  width: 44px; height: 44px; border-radius: 50%; background: #F2C4CE;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 18px; color: #7A5C4E; margin-bottom: 10px;
+}
+.testi-name { font-family: 'Fredoka One', cursive; font-size: 16px; color: #7A5C4E; }
+.stars { color: #F5A623; font-size: 14px; margin: 4px 0 10px; }
+.testi-card p { font-size: 13px; color: #C9A89A; line-height: 1.6; font-weight: 600; margin: 0; }
+
+.cta-sec {
+  background: #7A5C4E; padding: 60px; text-align: center; font-family: 'Nunito', sans-serif;
+  h2 { color: #fff; font-size: 36px; }
+  p { color: rgba(255,255,255,.75); font-size: 15px; font-weight: 600; margin: 12px 0 28px; }
+}
+
+.btn-primary {
+  display: inline-block; background: #D98EA0; color: #fff;
+  border: none; padding: 14px 28px; border-radius: 30px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+  cursor: pointer; text-decoration: none; box-shadow: 0 4px 0 #B57080;
+  transition: transform .1s, box-shadow .1s;
+  &:hover { transform: translateY(-2px); }
+  &:active { transform: translateY(3px); box-shadow: 0 1px 0 #B57080; }
+  &.large { font-size: 16px; padding: 16px 36px; }
+}
+.btn-secondary {
+  display: inline-block; background: #fff; color: #7A5C4E;
+  border: 2px solid #D98EA0; padding: 14px 28px; border-radius: 30px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+  cursor: pointer; text-decoration: none; transition: background .2s;
+  &:hover { background: #FFF0F5; }
+}
+
+@media (max-width: 768px) {
+  .hero { flex-direction: column; padding: 40px 24px 0; text-align: center; }
+  h1 { font-size: 38px; }
+  .hero-art { display: none; }
+  .sec, .cloud-sec, .cta-sec { padding: 48px 24px; }
+  .stats-bar { padding: 20px 24px; gap: 20px; }
+}

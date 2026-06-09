@@ -1,0 +1,88 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="hero-tag">🌸 Sumaré-SP · Adoção responsável</span>
+    <h1>Encontre seu<br><span class="highlight">amiguinho</span><br>perfeito!</h1>
+    <p class="hero-sub">Conectamos protetores independentes e ONGs de Sumaré com famílias que querem dar um lar cheio de amor para um bichinho especial. 🐶🐱</p>
+    <div class="hero-btns">
+      <a routerLink="/animais" class="btn-primary">Ver animais disponíveis 🐾</a>
+      <a routerLink="/auth/cadastrar" class="btn-secondary">Quero doar um animal</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="hero-main-img">🐶</div>
+    <div class="float-card" style="top:20px;right:0">
+      <span class="fc-dot">🐱</span>
+      <div><strong>Mel</strong><br><small>Gata · 1 ano</small></div>
+    </div>
+    <div class="float-card" style="bottom:80px;left:0">
+      <span class="fc-dot">🐶</span>
+      <div><strong>Bolinha</strong><br><small>Cão · 3 meses</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat" *ngFor="let s of stats">
+    <div class="stat-num">{{ s.num }}</div>
+    <div class="stat-label">{{ s.label }}</div>
+  </div>
+</div>
+
+<!-- ANIMAIS DESTAQUE -->
+<section class="sec">
+  <div class="sec-header">
+    <span class="sec-tag">🐾 Adote com amor</span>
+    <h2>Animaizinhos esperando por você</h2>
+    <p>Conheça alguns dos peludinhos que estão aguardando um lar!</p>
+  </div>
+  <div *ngIf="loading" class="loading-paws">🐾 Carregando...</div>
+  <div class="cards-grid" *ngIf="!loading">
+    <app-animal-card *ngFor="let a of animaisDestaque" [animal]="a" />
+  </div>
+  <div class="sec-footer">
+    <a routerLink="/animais" class="btn-primary">Ver todos os animais 🐾</a>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="cloud-sec">
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <div class="cloud c3"></div><div class="cloud c4"></div>
+  <div class="cloud-inner">
+    <span class="sec-tag dark">💛 Como funciona</span>
+    <h2>Tão simples quanto um abraço de gatinho!</h2>
+    <p>Em 4 passinhos você encontra e adota o seu novo melhor amigo. Só amor!</p>
+    <div class="steps-grid">
+      <div class="step-card" *ngFor="let p of passos">
+        <div class="step-icon">{{ p.icon }}</div>
+        <div class="step-num">{{ p.num }}</div>
+        <p>{{ p.text }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="sec testi-sec">
+  <div class="sec-header">
+    <span class="sec-tag">💬 Histórias fofinhas</span>
+    <h2>Famílias que encontraram seu amor</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card" *ngFor="let d of depoimentos">
+      <div class="testi-avatar">{{ d.inicial }}</div>
+      <div class="testi-name">{{ d.nome }}</div>
+      <div class="stars">★★★★★</div>
+      <p>{{ d.texto }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-sec">
+  <h2>Pronto para mudar uma vida? 🐾</h2>
+  <p>Cadastre-se gratuitamente e faça parte dessa corrente do bem em Sumaré!</p>
+  <a routerLink="/auth/cadastrar" class="btn-primary large">Começar agora — é grátis!</a>
+</section>

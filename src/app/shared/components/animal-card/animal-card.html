@@ -1,0 +1,33 @@
+<div class="card" [class.unavailable]="!isDisponivel">
+  <a [routerLink]="['/animais', animal.id]" class="card-link">
+    <div class="card-img" [style.background]="bgColor">
+      <span class="emoji">{{ emoji }}</span>
+      <span class="badge" [class.adotado]="!isDisponivel">
+        {{ isDisponivel ? 'Disponível' : animal.status === 'Reservado' ? '⏳ Reservado' : '✓ Adotado' }}
+      </span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-name">{{ animal.nome }}</h3>
+      <p class="card-info">
+        {{ animal.especie === 'Cao' ? 'Cão' : animal.especie }} · {{ animal.porte }} porte ·
+        {{ idadeLabel }} · {{ animal.sexo === 'M' ? 'Macho' : 'Fêmea' }}
+      </p>
+      <div class="pills">
+        <span class="pill" *ngIf="animal.castrado">✂ Castrado</span>
+        <span class="pill" *ngIf="animal.vacinado">💉 Vacinado</span>
+      </div>
+      <p class="protetor">🤝 {{ animal.nomeProtetor }}</p>
+    </div>
+  </a>
+
+  <div class="card-footer">
+    <a *ngIf="isDisponivel" [routerLink]="['/animais', animal.id]" class="btn-adopt">
+      Quero adotar! 🐾
+    </a>
+    <span *ngIf="!isDisponivel" class="btn-disabled">Já tem um lar 🏡</span>
+
+    <ng-container *ngIf="showActions">
+      <button class="btn-remove" (click)="remover.emit(animal.id)">Remover</button>
+    </ng-container>
+  </div>
+</div>

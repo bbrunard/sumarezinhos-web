@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+.page { padding: 48px 60px; background: #FDF6EC; min-height: calc(100vh - 72px); font-family: 'Nunito', sans-serif; }
+.page-header { text-align: center; margin-bottom: 36px; }
+.page-tag { display: inline-block; background: #F2C4CE; color: #7A5C4E; font-size: 12px; font-weight: 800; padding: 5px 16px; border-radius: 20px; margin-bottom: 12px; }
+h1 { font-family: 'Fredoka One', cursive; font-size: 40px; color: #7A5C4E; margin: 0 0 8px; }
+.page-header p { font-size: 14px; color: #C9A89A; font-weight: 600; }
+.filters-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px; align-items: center; }
+.filter-btn { background: #fff; border: 2px solid #F2C4CE; padding: 8px 20px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; color: #7A5C4E; cursor: pointer; transition: all .2s; &.active, &:hover { background: #D98EA0; color: #fff; border-color: #D98EA0; } }
+.filter-select { background: #fff; border: 2px solid #F2C4CE; padding: 8px 16px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; color: #7A5C4E; cursor: pointer; }
+.loading, .empty { text-align: center; padding: 60px; font-size: 18px; color: #C9A89A; font-weight: 700; }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+@media (max-width: 768px) { .page { padding: 32px 20px; } h1 { font-size: 30px; } }

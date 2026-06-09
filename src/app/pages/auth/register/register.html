@@ -1,0 +1,26 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🐾</div>
+    <h1>Criar conta grátis!</h1>
+    <p class="auth-sub">Junte-se ao Sumarézinhos</p>
+
+    <div class="tipo-selector">
+      <button [class.active]="tipo === TipoUsuario.Adotante" (click)="tipo = TipoUsuario.Adotante">🏡 Quero adotar</button>
+      <button [class.active]="tipo === TipoUsuario.Protetor" (click)="tipo = TipoUsuario.Protetor">🤝 Sou protetor</button>
+    </div>
+
+    <div class="field"><label>Nome completo</label><input type="text" [(ngModel)]="nome" placeholder="Seu nome"></div>
+    <div class="field"><label>E-mail</label><input type="email" [(ngModel)]="email" placeholder="seu@email.com"></div>
+    <div class="field"><label>Senha</label><input type="password" [(ngModel)]="senha" placeholder="Mínimo 6 caracteres"></div>
+    <div class="field"><label>Telefone</label><input type="tel" [(ngModel)]="telefone" placeholder="(19) 99999-9999"></div>
+    <div class="field"><label>Cidade</label><input type="text" [(ngModel)]="cidade" placeholder="Sumaré"></div>
+
+    <div class="error-msg" *ngIf="erro">⚠ {{ erro }}</div>
+    <div class="success-msg" *ngIf="sucesso">🎉 {{ sucesso }}</div>
+
+    <button class="btn-primary" (click)="registrar()" [disabled]="loading">
+      {{ loading ? '⏳ Criando conta...' : 'Criar minha conta 🐾' }}
+    </button>
+    <p class="auth-link">Já tem conta? <a routerLink="/auth/login">Entrar aqui</a></p>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<nav class="navbar">
+  <a routerLink="/" class="logo">Sumaréz<span>inhos</span> 🐾</a>
+
+  <ul class="nav-links" [class.open]="menuOpen">
+    <li><a routerLink="/animais" routerLinkActive="active" (click)="menuOpen=false">Adotar</a></li>
+    <li *ngIf="auth.isLoggedIn()">
+      <a routerLink="/meus-animais" routerLinkActive="active" (click)="menuOpen=false">Meus Animais</a>
+    </li>
+    <li *ngIf="auth.isLoggedIn()">
+      <a routerLink="/minhas-adocoes" routerLinkActive="active" (click)="menuOpen=false">Adoções</a>
+    </li>
+  </ul>
+
+  <div class="nav-actions">
+    <ng-container *ngIf="!auth.isLoggedIn(); else loggedIn">
+      <a routerLink="/auth/login" class="btn-ghost">Entrar</a>
+      <a routerLink="/auth/cadastrar" class="btn-primary">Cadastrar</a>
+    </ng-container>
+    <ng-template #loggedIn>
+      <a routerLink="/perfil" class="user-name">👤 {{ auth.currentUser()?.nomeUsuario }}</a>
+      <button class="btn-ghost" (click)="logout()">Sair</button>
+    </ng-template>
+  </div>
+
+  <button class="hamburger" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen">
+    <span></span><span></span><span></span>
+  </button>
+</nav>

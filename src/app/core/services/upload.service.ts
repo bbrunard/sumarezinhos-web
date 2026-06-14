@@ -4,12 +4,9 @@ import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UploadService {
-  // ─── Configuração Cloudinary ──────────────────────────────────────
-  // 1. Crie conta grátis em cloudinary.com
-  // 2. No painel: Settings → Upload → Add upload preset → Unsigned → salve o nome
-  // 3. Substitua os dois valores abaixo
-  private readonly CLOUD_NAME   = 'SEU_CLOUD_NAME';   // ex: dxyz1234
-  private readonly UPLOAD_PRESET = 'SEU_UPLOAD_PRESET'; // ex: sumarezinhos_preset
+
+  private readonly CLOUD_NAME   = 'dsnlvengh';
+  private readonly UPLOAD_PRESET = 'sumarezinhos_preset';
 
   private get uploadUrl() {
     return `https://api.cloudinary.com/v1_1/${this.CLOUD_NAME}/image/upload`;

@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AnimalService } from '../../core/services/animal.service';
+import { UploadService } from '../../core/services/upload.service';
 import { EspecieAnimal, PorteAnimal } from '../../core/models/animal.model';
 
 @Component({
@@ -13,10 +14,13 @@ import { EspecieAnimal, PorteAnimal } from '../../core/models/animal.model';
   styleUrls: ['./add-animal.scss']
 })
 export class AddAnimalComponent {
-  private svc    = inject(AnimalService);
-  private router = inject(Router);
+  private animalSvc  = inject(AnimalService);
+  private uploadSvc  = inject(UploadService);
+  private router     = inject(Router);
 
-  // Enums expostos para o template
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  // Enums para o template
   EspecieAnimal = EspecieAnimal;
   PorteAnimal   = PorteAnimal;
 
@@ -29,20 +33,27 @@ export class AddAnimalComponent {
   castrado   = false;
   vacinado   = false;
   descricao  = '';
-  fotoUrl    = '';
 
-  // Estado
+  // Upload de imagem
+  fotoUrl        = '';
+  fotoPreviewUrl = '';
+  uploadando     = false;
+  erroUpload     = '';
+  arquivoNome    = '';
+
+  // Estado geral
   loading  = false;
   erro     = '';
   sucesso  = '';
 
-  // Etapa ativa do formulário (wizard)
-  etapa = 1;
+  // Wizard
+  etapa       = 1;
   totalEtapas = 3;
 
-  get progressoPct() {
-    return Math.round((this.etapa / this.totalEtapas) * 100);
-  }
+  get progressoPct()   { return Math.round((this.etapa / this.totalEtapas) * 100); }
+  get etapa1Valida()   { return this.nome.trim().length >= 2 && !!this.especie && !!this.porte; }
+  get etapa2Valida()   { return !!this.sexo && this.idadeMeses >= 0; }
+  get etapa3Valida()   { return this.descricao.trim().length >= 20; }
 
   get emojiEspecie(): string {
     const m: Record<number, string> = {
@@ -53,41 +64,92 @@ export class AddAnimalComponent {
     return m[this.especie] ?? '🐾';
   }
 
-  get etapa1Valida(): boolean {
-    return this.nome.trim().length >= 2 && !!this.especie && !!this.porte;
-  }
-
-  get etapa2Valida(): boolean {
-    return !!this.sexo && this.idadeMeses >= 0;
-  }
-
-  get etapa3Valida(): boolean {
-    return this.descricao.trim().length >= 20;
-  }
-
-  avancar() {
-    if (this.etapa < this.totalEtapas) this.etapa++;
-  }
-
-  voltar() {
-    if (this.etapa > 1) this.etapa--;
-  }
+  avancar() { if (this.etapa < this.totalEtapas) this.etapa++; }
+  voltar()  { if (this.etapa > 1) this.etapa--; }
 
   decrementarIdade() {
-    if (this.idadeMeses > 0) this.idadeMeses--;
+    if (this.idadeMeses > 0) {
+      this.idadeMeses--;
+    }
   }
 
   incrementarIdade() {
-    if (this.idadeMeses < 300) this.idadeMeses++;
+    if (this.idadeMeses < 300) {
+      this.idadeMeses++;
+    }
   }
 
+  // ─── Upload ───────────────────────────────────────────────────────
+  abrirSeletor() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onArquivoArrastado(event: DragEvent) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files?.[0];
+    if (!file) return;
+    this.processarArquivo(file);
+  }
+
+  onArquivoSelecionado(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file  = input.files?.[0];
+    if (!file) return;
+    this.processarArquivo(file);
+  }
+
+  private processarArquivo(file: File) {
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!tiposPermitidos.includes(file.type)) {
+      this.erroUpload = 'Formato inválido. Use JPG, PNG ou WEBP.';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.erroUpload = 'A imagem deve ter no máximo 5 MB.';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = e => this.fotoPreviewUrl = e.target?.result as string;
+    reader.readAsDataURL(file);
+
+    this.arquivoNome = file.name;
+    this.erroUpload  = '';
+    this.uploadando  = true;
+    this.fotoUrl     = '';
+
+    this.uploadSvc.uploadImagem(file).subscribe({
+      next: url => {
+        this.fotoUrl    = url;
+        this.uploadando = false;
+      },
+      error: () => {
+        this.erroUpload    = 'Falha no upload. Tente novamente.';
+        this.fotoPreviewUrl = '';
+        this.arquivoNome   = '';
+        this.uploadando    = false;
+      }
+    });
+  }
+
+  removerFoto() {
+    this.fotoUrl        = '';
+    this.fotoPreviewUrl = '';
+    this.arquivoNome    = '';
+    this.erroUpload     = '';
+    if (this.fileInput?.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
+  }
+
+  // ─── Salvar ───────────────────────────────────────────────────────
   salvar() {
-    if (!this.etapa3Valida) return;
+    if (!this.etapa3Valida || this.uploadando) return;
     this.loading = true;
     this.erro    = '';
     this.sucesso = '';
 
-    this.svc.criar({
+    this.animalSvc.criar({
       nome:       this.nome.trim(),
       especie:    this.especie,
       porte:      this.porte,
@@ -96,11 +158,11 @@ export class AddAnimalComponent {
       castrado:   this.castrado,
       vacinado:   this.vacinado,
       descricao:  this.descricao.trim(),
-      fotoUrl:    this.fotoUrl.trim() || undefined
+      fotoUrl:    this.fotoUrl || undefined
     }).subscribe({
       next: res => {
         if (res.sucesso) {
-          this.sucesso = 'Animal cadastrado com sucesso! Redirecionando...';
+          this.sucesso = '🎉 Animal cadastrado com sucesso! Redirecionando...';
           setTimeout(() => this.router.navigate(['/meus-animais']), 1800);
         } else {
           this.erro = res.mensagem ?? 'Erro ao cadastrar animal.';

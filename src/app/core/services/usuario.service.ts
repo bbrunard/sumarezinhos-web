@@ -9,6 +9,9 @@ import { ApiResponse } from '../models/api-response.model';
 export class UsuarioService {
   private url = `${environment.apiUrl}/usuarios`;
 
+  private readonly CLOUD_NAME    = 'dsnlvengh';
+  private readonly UPLOAD_PRESET = 'sumarezinhos_preset';
+
   constructor(private http: HttpClient) {}
 
   perfil(): Observable<ApiResponse<Usuario>> {

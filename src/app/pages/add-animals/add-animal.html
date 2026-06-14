@@ -8,7 +8,7 @@
     <p>Preencha as informações em 3 passinhos e ajude a encontrar um lar cheio de amor.</p>
   </div>
 
-  <!-- Barra de progresso -->
+  <!-- Indicador de etapas -->
   <div class="progress-wrap">
     <div class="progress-steps">
       <div class="step-dot" [class.done]="etapa > 1" [class.active]="etapa === 1">
@@ -23,32 +23,38 @@
       <div class="step-line" [class.done]="etapa > 2"></div>
       <div class="step-dot" [class.active]="etapa === 3">
         <span>3</span>
-        <small>Descrição</small>
+        <small>Foto & Bio</small>
       </div>
     </div>
   </div>
 
-  <!-- Formulário -->
+  <!-- Card principal -->
   <div class="form-card">
 
-    <!-- Preview do animal -->
+    <!-- Preview dinâmico do animal -->
     <div class="animal-preview">
-      <div class="preview-emoji">{{ emojiEspecie }}</div>
+      <div class="preview-thumb">
+        <img *ngIf="fotoPreviewUrl" [src]="fotoPreviewUrl" alt="Preview">
+        <span *ngIf="!fotoPreviewUrl">{{ emojiEspecie }}</span>
+      </div>
       <div class="preview-info">
         <strong>{{ nome || 'Nome do animal' }}</strong>
-        <span>{{ especie === EspecieAnimal.Cao ? 'Cão' : especie === EspecieAnimal.Gato ? 'Gato' : 'Outro' }}
+        <span>
+          {{ especie === EspecieAnimal.Cao ? 'Cão' : especie === EspecieAnimal.Gato ? 'Gato' : 'Outro' }}
           · {{ porte === PorteAnimal.Pequeno ? 'Pequeno' : porte === PorteAnimal.Medio ? 'Médio' : 'Grande' }}
-          · {{ sexo === 'M' ? 'Macho' : 'Fêmea' }}</span>
+          · {{ sexo === 'M' ? 'Macho' : 'Fêmea' }}
+        </span>
       </div>
     </div>
 
-    <!-- ETAPA 1: Identidade -->
+    <!-- ── ETAPA 1: Identidade ── -->
     <div *ngIf="etapa === 1">
       <h2 class="step-title">Quem é esse bichinho? 🐾</h2>
 
       <div class="field">
         <label>Nome do animal *</label>
-        <input type="text" [(ngModel)]="nome" placeholder="Ex: Bolinha, Luna, Thor..." maxlength="100">
+        <input type="text" [(ngModel)]="nome"
+          placeholder="Ex: Bolinha, Luna, Thor..." maxlength="100">
       </div>
 
       <div class="field">
@@ -56,18 +62,15 @@
         <div class="option-cards">
           <div class="option-card" [class.selected]="especie === EspecieAnimal.Cao"
                (click)="especie = EspecieAnimal.Cao">
-            <span class="opt-icon">🐶</span>
-            <span>Cão</span>
+            <span class="opt-icon">🐶</span><span>Cão</span>
           </div>
           <div class="option-card" [class.selected]="especie === EspecieAnimal.Gato"
                (click)="especie = EspecieAnimal.Gato">
-            <span class="opt-icon">🐱</span>
-            <span>Gato</span>
+            <span class="opt-icon">🐱</span><span>Gato</span>
           </div>
           <div class="option-card" [class.selected]="especie === EspecieAnimal.Outro"
                (click)="especie = EspecieAnimal.Outro">
-            <span class="opt-icon">🐇</span>
-            <span>Outro</span>
+            <span class="opt-icon">🐇</span><span>Outro</span>
           </div>
         </div>
       </div>
@@ -77,18 +80,15 @@
         <div class="option-cards">
           <div class="option-card" [class.selected]="porte === PorteAnimal.Pequeno"
                (click)="porte = PorteAnimal.Pequeno">
-            <span class="opt-icon">🔹</span>
-            <span>Pequeno</span>
+            <span class="opt-icon">🔹</span><span>Pequeno</span>
           </div>
           <div class="option-card" [class.selected]="porte === PorteAnimal.Medio"
                (click)="porte = PorteAnimal.Medio">
-            <span class="opt-icon">🔸</span>
-            <span>Médio</span>
+            <span class="opt-icon">🔸</span><span>Médio</span>
           </div>
           <div class="option-card" [class.selected]="porte === PorteAnimal.Grande"
                (click)="porte = PorteAnimal.Grande">
-            <span class="opt-icon">🔶</span>
-            <span>Grande</span>
+            <span class="opt-icon">🔶</span><span>Grande</span>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
       </div>
     </div>
 
-    <!-- ETAPA 2: Detalhes -->
+    <!-- ── ETAPA 2: Detalhes ── -->
     <div *ngIf="etapa === 2">
       <h2 class="step-title">Mais detalhes! 🌸</h2>
 
@@ -120,12 +120,15 @@
       <div class="field">
         <label>Idade (em meses) *</label>
         <div class="age-input-wrap">
-          <button class="age-btn" (click)="decrementarIdade()">−</button>
-          <input type="number" [(ngModel)]="idadeMeses" min="0" max="300" class="age-input">
-          <button class="age-btn" (click)="incrementarIdade()">+</button>
+          <button class="age-btn" type="button" (click)="decrementarIdade()">−</button>
+          <input type="number" [(ngModel)]="idadeMeses"
+            min="0" max="300" class="age-input">
+          <button class="age-btn" type="button" (click)="incrementarIdade()">+</button>
         </div>
         <span class="age-hint" *ngIf="idadeMeses > 0">
-          ≈ {{ idadeMeses < 12 ? idadeMeses + ' meses' : (idadeMeses / 12 | number:'1.0-1') + ' anos' }}
+          ≈ {{ idadeMeses < 12
+            ? idadeMeses + (idadeMeses === 1 ? ' mês' : ' meses')
+            : (idadeMeses / 12 | number:'1.0-1') + ' anos' }}
         </span>
       </div>
 
@@ -161,40 +164,95 @@
       </div>
     </div>
 
-    <!-- ETAPA 3: Descrição e foto -->
+    <!-- ── ETAPA 3: Foto e descrição ── -->
     <div *ngIf="etapa === 3">
-      <h2 class="step-title">Conte a história dele! 💛</h2>
+      <h2 class="step-title">Foto e história! 💛</h2>
 
+      <!-- Upload de foto -->
       <div class="field">
-        <label>Descrição * <span class="label-hint">(mínimo 20 caracteres)</span></label>
-        <textarea [(ngModel)]="descricao" rows="5" maxlength="1000"
+        <label>Foto do animal</label>
+
+        <!-- Input de arquivo oculto -->
+        <input
+          #fileInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          class="file-input-hidden"
+          (change)="onArquivoSelecionado($event)">
+
+        <!-- Estado: sem foto -->
+        <div class="upload-area" *ngIf="!fotoPreviewUrl && !uploadando"
+             (click)="abrirSeletor()"
+             (dragover)="$event.preventDefault()"
+             (drop)="onArquivoArrastado($event)">
+          <div class="upload-icon">📷</div>
+          <p class="upload-label">Clique ou arraste a foto aqui</p>
+          <span class="upload-hint">JPG, PNG ou WEBP · máx. 5 MB</span>
+          <button class="btn-upload" type="button" (click)="abrirSeletor()">
+            Escolher foto
+          </button>
+        </div>
+
+        <!-- Estado: fazendo upload -->
+        <div class="upload-loading" *ngIf="uploadando">
+          <div class="upload-spinner">⏳</div>
+          <p>Enviando <strong>{{ arquivoNome }}</strong>...</p>
+          <div class="progress-track">
+            <div class="progress-fill-anim"></div>
+          </div>
+        </div>
+
+        <!-- Estado: foto enviada com sucesso -->
+        <div class="upload-preview" *ngIf="fotoPreviewUrl && !uploadando">
+          <img [src]="fotoPreviewUrl" alt="Preview do animal">
+          <div class="preview-overlay">
+            <span class="preview-ok" *ngIf="fotoUrl">✅ Foto enviada!</span>
+            <button class="btn-trocar" type="button" (click)="abrirSeletor()">
+              🔄 Trocar foto
+            </button>
+            <button class="btn-remover-foto" type="button" (click)="removerFoto()">
+              🗑 Remover
+            </button>
+          </div>
+        </div>
+
+        <!-- Erro de upload -->
+        <div class="upload-erro" *ngIf="erroUpload">
+          ⚠ {{ erroUpload }}
+          <button type="button" (click)="erroUpload = ''">✕</button>
+        </div>
+      </div>
+
+      <!-- Descrição -->
+      <div class="field">
+        <label>
+          Descrição *
+          <span class="label-hint">(mínimo 20 caracteres)</span>
+        </label>
+        <textarea
+          [(ngModel)]="descricao"
+          rows="5"
+          maxlength="1000"
           placeholder="Conte um pouco sobre a personalidade, história e necessidades especiais do bichinho. Quanto mais detalhes, mais fácil encontrar o lar certo!">
         </textarea>
         <div class="char-count" [class.warn]="descricao.length < 20">
           {{ descricao.length }}/1000
-          <span *ngIf="descricao.length < 20"> — mínimo {{ 20 - descricao.length }} chars</span>
+          <span *ngIf="descricao.length < 20 && descricao.length > 0">
+            — faltam {{ 20 - descricao.length }} caracteres
+          </span>
         </div>
       </div>
 
-      <div class="field">
-        <label>URL da foto <span class="label-hint">(opcional)</span></label>
-        <input type="url" [(ngModel)]="fotoUrl" placeholder="https://exemplo.com/foto-do-animal.jpg">
-        <div class="foto-preview" *ngIf="fotoUrl">
-          <img [src]="fotoUrl" alt="Preview da foto" (error)="fotoUrl = ''"
-               onerror="this.style.display='none'">
-        </div>
-        <p class="field-tip">💡 Dica: envie a foto para o Imgur (imgur.com) e cole o link aqui.</p>
-      </div>
-
-      <!-- Mensagens de feedback -->
-      <div class="success-msg" *ngIf="sucesso">🎉 {{ sucesso }}</div>
+      <!-- Feedback -->
+      <div class="success-msg" *ngIf="sucesso">{{ sucesso }}</div>
       <div class="error-msg"   *ngIf="erro">⚠ {{ erro }}</div>
 
       <div class="form-nav">
         <button class="btn-ghost" (click)="voltar()">← Voltar</button>
-        <button class="btn-primary" (click)="salvar()"
-                [disabled]="loading || !etapa3Valida || !!sucesso">
-          {{ loading ? '⏳ Cadastrando...' : 'Cadastrar animal 🐾' }}
+        <button class="btn-primary" type="button"
+          (click)="salvar()"
+          [disabled]="loading || uploadando || !etapa3Valida || !!sucesso">
+          {{ loading ? '⏳ Cadastrando...' : uploadando ? '⏳ Aguardando upload...' : 'Cadastrar animal 🐾' }}
         </button>
       </div>
     </div>

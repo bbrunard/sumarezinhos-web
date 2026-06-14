@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+.page { padding: 48px 60px; background: #FDF6EC; min-height: calc(100vh - 72px); font-family: 'Nunito', sans-serif; }
+.page-tag { display: inline-block; background: #F2C4CE; color: #7A5C4E; font-size: 12px; font-weight: 800; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px; }
+.header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+h1 { font-family: 'Fredoka One', cursive; font-size: 36px; color: #7A5C4E; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0; }
+.loading { text-align: center; padding: 60px; font-size: 18px; color: #C9A89A; font-weight: 700; }
+.error-msg { background: #FCEBEB; border: 1px solid #F7C1C1; color: #a32d2d; padding: 12px 16px; border-radius: 14px; font-weight: 700; font-size: 13px; margin-bottom: 20px; }
+.empty { text-align: center; padding: 60px 20px; }
+.empty-icon { font-size: 56px; margin-bottom: 16px; }
+.empty h2 { font-family: 'Fredoka One', cursive; font-size: 24px; color: #7A5C4E; margin: 0 0 8px; }
+.empty p { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0 0 24px; }
+.resumo-grid { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+.resumo-card { background: #fff; border: 2px solid var(--c, #F2C4CE); border-radius: 16px; padding: 14px 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 110px; }
+.r-num { font-family: 'Fredoka One', cursive; font-size: 28px; color: #7A5C4E; }
+.r-label { font-size: 12px; font-weight: 700; color: #C9A89A; }
+.animals-list { display: flex; flex-direction: column; gap: 10px; }
+.animal-row { background: #fff; border: 1.5px solid #F2C4CE; border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.animal-emoji { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+.animal-info { flex: 1; min-width: 120px; strong { display: block; font-size: 15px; color: #7A5C4E; } span { font-size: 12px; color: #C9A89A; font-weight: 600; } }
+.status-badge { font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 12px; white-space: nowrap;
+  &.disponivel { background: #F0FFF0; color: #3a6b4a; }
+  &.reservado { background: #FFF8E0; color: #A07820; }
+  &.adotado { background: #EEF2FF; color: #3a4e8c; }
+}
+.animal-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn-sm { font-size: 12px; font-weight: 800; padding: 7px 14px; border-radius: 12px; cursor: pointer; font-family: 'Nunito', sans-serif; transition: .15s; border: none;
+  &.ghost { background: #fff; border: 1.5px solid #F2C4CE; color: #7A5C4E; text-decoration: none; display: inline-flex; align-items: center; &:hover { border-color: #D98EA0; } }
+  &.danger { background: #FCEBEB; color: #a32d2d; border: 1.5px solid #F7C1C1; &:hover:not(:disabled) { background: #f7c1c1; } &:disabled { opacity: .5; cursor: not-allowed; } }
+}
+.btn-primary { background: #D98EA0; color: #fff; border: none; padding: 11px 22px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 3px 0 #B57080; transition: .1s; &:hover { transform: translateY(-2px); } }
+@media (max-width: 768px) { .page { padding: 32px 20px; } h1 { font-size: 28px; } .animal-row { gap: 10px; } }

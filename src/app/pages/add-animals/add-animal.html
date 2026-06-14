@@ -1,0 +1,203 @@
+<div class="page">
+
+  <!-- Cabeçalho -->
+  <div class="page-header">
+    <a routerLink="/meus-animais" class="back-btn">← Voltar</a>
+    <div class="header-tag">🐾 Cadastrar animal</div>
+    <h1>Coloque um bichinho<br><span>para adoção!</span></h1>
+    <p>Preencha as informações em 3 passinhos e ajude a encontrar um lar cheio de amor.</p>
+  </div>
+
+  <!-- Barra de progresso -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="step-dot" [class.done]="etapa > 1" [class.active]="etapa === 1">
+        <span>{{ etapa > 1 ? '✓' : '1' }}</span>
+        <small>Identidade</small>
+      </div>
+      <div class="step-line" [class.done]="etapa > 1"></div>
+      <div class="step-dot" [class.done]="etapa > 2" [class.active]="etapa === 2">
+        <span>{{ etapa > 2 ? '✓' : '2' }}</span>
+        <small>Detalhes</small>
+      </div>
+      <div class="step-line" [class.done]="etapa > 2"></div>
+      <div class="step-dot" [class.active]="etapa === 3">
+        <span>3</span>
+        <small>Descrição</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário -->
+  <div class="form-card">
+
+    <!-- Preview do animal -->
+    <div class="animal-preview">
+      <div class="preview-emoji">{{ emojiEspecie }}</div>
+      <div class="preview-info">
+        <strong>{{ nome || 'Nome do animal' }}</strong>
+        <span>{{ especie === EspecieAnimal.Cao ? 'Cão' : especie === EspecieAnimal.Gato ? 'Gato' : 'Outro' }}
+          · {{ porte === PorteAnimal.Pequeno ? 'Pequeno' : porte === PorteAnimal.Medio ? 'Médio' : 'Grande' }}
+          · {{ sexo === 'M' ? 'Macho' : 'Fêmea' }}</span>
+      </div>
+    </div>
+
+    <!-- ETAPA 1: Identidade -->
+    <div *ngIf="etapa === 1">
+      <h2 class="step-title">Quem é esse bichinho? 🐾</h2>
+
+      <div class="field">
+        <label>Nome do animal *</label>
+        <input type="text" [(ngModel)]="nome" placeholder="Ex: Bolinha, Luna, Thor..." maxlength="100">
+      </div>
+
+      <div class="field">
+        <label>Espécie *</label>
+        <div class="option-cards">
+          <div class="option-card" [class.selected]="especie === EspecieAnimal.Cao"
+               (click)="especie = EspecieAnimal.Cao">
+            <span class="opt-icon">🐶</span>
+            <span>Cão</span>
+          </div>
+          <div class="option-card" [class.selected]="especie === EspecieAnimal.Gato"
+               (click)="especie = EspecieAnimal.Gato">
+            <span class="opt-icon">🐱</span>
+            <span>Gato</span>
+          </div>
+          <div class="option-card" [class.selected]="especie === EspecieAnimal.Outro"
+               (click)="especie = EspecieAnimal.Outro">
+            <span class="opt-icon">🐇</span>
+            <span>Outro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Porte *</label>
+        <div class="option-cards">
+          <div class="option-card" [class.selected]="porte === PorteAnimal.Pequeno"
+               (click)="porte = PorteAnimal.Pequeno">
+            <span class="opt-icon">🔹</span>
+            <span>Pequeno</span>
+          </div>
+          <div class="option-card" [class.selected]="porte === PorteAnimal.Medio"
+               (click)="porte = PorteAnimal.Medio">
+            <span class="opt-icon">🔸</span>
+            <span>Médio</span>
+          </div>
+          <div class="option-card" [class.selected]="porte === PorteAnimal.Grande"
+               (click)="porte = PorteAnimal.Grande">
+            <span class="opt-icon">🔶</span>
+            <span>Grande</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <span></span>
+        <button class="btn-primary" (click)="avancar()" [disabled]="!etapa1Valida">
+          Próximo passo →
+        </button>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: Detalhes -->
+    <div *ngIf="etapa === 2">
+      <h2 class="step-title">Mais detalhes! 🌸</h2>
+
+      <div class="field">
+        <label>Sexo *</label>
+        <div class="option-cards">
+          <div class="option-card" [class.selected]="sexo === 'M'" (click)="sexo = 'M'">
+            <span class="opt-icon">🐾</span><span>Macho</span>
+          </div>
+          <div class="option-card" [class.selected]="sexo === 'F'" (click)="sexo = 'F'">
+            <span class="opt-icon">🌸</span><span>Fêmea</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Idade (em meses) *</label>
+        <div class="age-input-wrap">
+          <button class="age-btn" (click)="decrementarIdade()">−</button>
+          <input type="number" [(ngModel)]="idadeMeses" min="0" max="300" class="age-input">
+          <button class="age-btn" (click)="incrementarIdade()">+</button>
+        </div>
+        <span class="age-hint" *ngIf="idadeMeses > 0">
+          ≈ {{ idadeMeses < 12 ? idadeMeses + ' meses' : (idadeMeses / 12 | number:'1.0-1') + ' anos' }}
+        </span>
+      </div>
+
+      <div class="field">
+        <label>Saúde</label>
+        <div class="toggle-row">
+          <div class="toggle-item" (click)="castrado = !castrado">
+            <div class="toggle" [class.on]="castrado">
+              <div class="toggle-knob"></div>
+            </div>
+            <div>
+              <strong>✂ Castrado</strong>
+              <p>O animal já foi castrado</p>
+            </div>
+          </div>
+          <div class="toggle-item" (click)="vacinado = !vacinado">
+            <div class="toggle" [class.on]="vacinado">
+              <div class="toggle-knob"></div>
+            </div>
+            <div>
+              <strong>💉 Vacinado</strong>
+              <p>Possui vacinas em dia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn-ghost" (click)="voltar()">← Voltar</button>
+        <button class="btn-primary" (click)="avancar()" [disabled]="!etapa2Valida">
+          Próximo passo →
+        </button>
+      </div>
+    </div>
+
+    <!-- ETAPA 3: Descrição e foto -->
+    <div *ngIf="etapa === 3">
+      <h2 class="step-title">Conte a história dele! 💛</h2>
+
+      <div class="field">
+        <label>Descrição * <span class="label-hint">(mínimo 20 caracteres)</span></label>
+        <textarea [(ngModel)]="descricao" rows="5" maxlength="1000"
+          placeholder="Conte um pouco sobre a personalidade, história e necessidades especiais do bichinho. Quanto mais detalhes, mais fácil encontrar o lar certo!">
+        </textarea>
+        <div class="char-count" [class.warn]="descricao.length < 20">
+          {{ descricao.length }}/1000
+          <span *ngIf="descricao.length < 20"> — mínimo {{ 20 - descricao.length }} chars</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>URL da foto <span class="label-hint">(opcional)</span></label>
+        <input type="url" [(ngModel)]="fotoUrl" placeholder="https://exemplo.com/foto-do-animal.jpg">
+        <div class="foto-preview" *ngIf="fotoUrl">
+          <img [src]="fotoUrl" alt="Preview da foto" (error)="fotoUrl = ''"
+               onerror="this.style.display='none'">
+        </div>
+        <p class="field-tip">💡 Dica: envie a foto para o Imgur (imgur.com) e cole o link aqui.</p>
+      </div>
+
+      <!-- Mensagens de feedback -->
+      <div class="success-msg" *ngIf="sucesso">🎉 {{ sucesso }}</div>
+      <div class="error-msg"   *ngIf="erro">⚠ {{ erro }}</div>
+
+      <div class="form-nav">
+        <button class="btn-ghost" (click)="voltar()">← Voltar</button>
+        <button class="btn-primary" (click)="salvar()"
+                [disabled]="loading || !etapa3Valida || !!sucesso">
+          {{ loading ? '⏳ Cadastrando...' : 'Cadastrar animal 🐾' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

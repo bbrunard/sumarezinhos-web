@@ -11,5 +11,6 @@ export const routes: Routes = [
   { path: 'meus-animais', loadComponent: () => import('./pages/my-animals/my-animals').then(m => m.MyAnimalsComponent), canActivate: [authGuard] },
   { path: 'minhas-adocoes', loadComponent: () => import('./pages/my-adoptions/my-adoptions').then(m => m.MyAdoptionsComponent), canActivate: [authGuard] },
   { path: 'perfil', loadComponent: () => import('./pages/profile/profile').then(m => m.ProfileComponent), canActivate: [authGuard] },
+  { path: 'cadastrar-animal', loadComponent: () => import('./pages/add-animals/add-animal').then(m => m.AddAnimalComponent), canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

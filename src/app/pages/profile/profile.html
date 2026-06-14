@@ -1,1 +1,108 @@
-<p>profile works!</p>
+<div class="page">
+
+  <div *ngIf="loading" class="loading">👤 Carregando perfil...</div>
+  <div *ngIf="erro && !loading" class="error-msg">⚠ {{ erro }}</div>
+
+  <ng-container *ngIf="!loading && usuario">
+
+    <!-- Card de perfil -->
+    <div class="profile-hero">
+      <div class="avatar">{{ inicial }}</div>
+      <div class="profile-info">
+        <span class="tipo-badge">{{ isProtetor ? '🤝 Protetor' : '🏡 Adotante' }}</span>
+        <h1>{{ usuario.nome }}</h1>
+        <p>{{ usuario.email }}</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-edit" (click)="editando = true" *ngIf="!editando">✏️ Editar perfil</button>
+        <button class="btn-logout" (click)="logout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- Atalhos rápidos -->
+    <div class="quick-links">
+      <a routerLink="/dashboard" class="qlink">📊 Dashboard</a>
+      <a routerLink="/meus-animais" class="qlink" *ngIf="isProtetor">🐾 Meus animais</a>
+      <a routerLink="/minhas-adocoes" class="qlink">💌 Solicitações</a>
+      <a routerLink="/cadastrar-animal" class="qlink" *ngIf="isProtetor">➕ Cadastrar animal</a>
+      <a routerLink="/animais" class="qlink" *ngIf="!isProtetor">🔍 Ver animais</a>
+    </div>
+
+    <!-- Dados do perfil -->
+    <div class="profile-card">
+      <div class="card-header">
+        <h2>Dados pessoais</h2>
+      </div>
+
+      <!-- Modo visualização -->
+      <ng-container *ngIf="!editando">
+        <div class="data-grid">
+          <div class="data-item">
+            <span class="data-label">Nome completo</span>
+            <span class="data-value">{{ usuario.nome }}</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">E-mail</span>
+            <span class="data-value">{{ usuario.email }}</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">Telefone</span>
+            <span class="data-value">{{ usuario.telefone || '—' }}</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">Cidade</span>
+            <span class="data-value">{{ usuario.cidade || '—' }}</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">Tipo de conta</span>
+            <span class="data-value">{{ usuario.tipo }}</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Modo edição -->
+      <ng-container *ngIf="editando">
+        <div class="edit-form">
+          <div class="field">
+            <label>Nome completo</label>
+            <input type="text" [(ngModel)]="nome" placeholder="Seu nome completo" maxlength="150">
+          </div>
+          <div class="field">
+            <label>Telefone</label>
+            <input type="tel" [(ngModel)]="telefone" placeholder="(19) 99999-9999">
+          </div>
+          <div class="field">
+            <label>Cidade</label>
+            <input type="text" [(ngModel)]="cidade" placeholder="Ex: Sumaré">
+          </div>
+          <div class="field readonly">
+            <label>E-mail <span class="readonly-hint">(não editável)</span></label>
+            <input type="email" [value]="usuario.email" disabled>
+          </div>
+
+          <div class="success-msg" *ngIf="sucesso">✅ {{ sucesso }}</div>
+          <div class="error-msg"   *ngIf="erro">⚠ {{ erro }}</div>
+
+          <div class="edit-actions">
+            <button class="btn-primary" (click)="salvar()" [disabled]="salvando || !nome.trim()">
+              {{ salvando ? '⏳ Salvando...' : 'Salvar alterações' }}
+            </button>
+            <button class="btn-ghost" (click)="cancelarEdicao()">Cancelar</button>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <!-- Mensagem de sucesso fora do modo edição -->
+    <div class="success-msg outside" *ngIf="sucesso && !editando">✅ {{ sucesso }}</div>
+
+    <!-- Zona de perigo -->
+    <div class="danger-zone">
+      <h3>Zona de perigo</h3>
+      <p>Ao sair, você precisará fazer login novamente para acessar sua conta.</p>
+      <button class="btn-logout-full" (click)="logout()">Sair da conta</button>
+    </div>
+
+  </ng-container>
+</div>

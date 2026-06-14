@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+.page { padding: 48px 60px; background: #FDF6EC; min-height: calc(100vh - 72px); font-family: 'Nunito', sans-serif; }
+.page-tag { display: inline-block; background: #F2C4CE; color: #7A5C4E; font-size: 12px; font-weight: 800; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px; }
+h1 { font-family: 'Fredoka One', cursive; font-size: 36px; color: #7A5C4E; margin: 0 0 6px; }
+.page-header { margin-bottom: 32px; }
+.page-header p { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0; }
+.loading { text-align: center; padding: 60px; font-size: 18px; color: #C9A89A; font-weight: 700; }
+.error-msg { background: #FCEBEB; border: 1px solid #F7C1C1; color: #a32d2d; padding: 12px 16px; border-radius: 14px; font-weight: 700; font-size: 13px; margin-bottom: 20px; }
+.empty { text-align: center; padding: 60px 20px; .empty-icon { font-size: 56px; margin-bottom: 16px; } h2 { font-family: 'Fredoka One', cursive; font-size: 24px; color: #7A5C4E; margin: 0 0 8px; } p { font-size: 14px; color: #C9A89A; font-weight: 600; margin: 0 0 24px; } }
+.resumo-grid { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+.resumo-card { background: #fff; border: 2px solid var(--c, #F2C4CE); border-radius: 16px; padding: 14px 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 110px; }
+.r-num { font-family: 'Fredoka One', cursive; font-size: 28px; color: #7A5C4E; }
+.r-label { font-size: 12px; font-weight: 700; color: #C9A89A; }
+.adocoes-list { display: flex; flex-direction: column; gap: 14px; }
+.adocao-card { background: #fff; border: 2px solid #F2C4CE; border-radius: 20px; padding: 20px; }
+.adocao-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.adocao-animal { display: flex; align-items: center; gap: 12px; }
+.animal-thumb { width: 44px; height: 44px; border-radius: 12px; background: #FFF0F5; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.adocao-animal strong { display: block; font-size: 15px; color: #7A5C4E; }
+.adocao-animal span { display: block; font-size: 12px; color: #C9A89A; font-weight: 600; }
+.adocao-animal small { font-size: 11px; color: #C9A89A; }
+.status-badge { font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 12px; white-space: nowrap;
+  &.pendente { background: #FFF8E0; color: #A07820; }
+  &.aprovada { background: #F0FFF0; color: #3a6b4a; }
+  &.recusada { background: #FCEBEB; color: #a32d2d; }
+}
+.motivacao { background: #FDF6EC; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+.motivacao-label { font-size: 11px; font-weight: 800; color: #C9A89A; text-transform: uppercase; letter-spacing: .04em; display: block; margin-bottom: 4px; }
+.motivacao p, .resposta-existente p { font-size: 13px; color: #7A5C4E; font-weight: 600; margin: 0; line-height: 1.6; }
+.resposta-existente { background: #F0FFF0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+.contato-box { background: #F0FFF0; border: 1.5px solid #B8D9C0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; color: #3a6b4a; font-weight: 600; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; strong { font-size: 15px; } }
+.acoes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.btn-sm { font-size: 12px; font-weight: 800; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-family: 'Nunito', sans-serif; border: none; transition: .15s;
+  &.aprovar { background: #F0FFF0; color: #3a6b4a; border: 1.5px solid #B8D9C0; &:hover { background: #B8D9C0; } }
+  &.recusar { background: #FCEBEB; color: #a32d2d; border: 1.5px solid #F7C1C1; &:hover { background: #F7C1C1; } }
+  &.ghost { background: #fff; border: 1.5px solid #F2C4CE; color: #7A5C4E; &:hover { border-color: #D98EA0; } }
+}
+.recusa-form { background: #FDF6EC; border-radius: 14px; padding: 14px; margin-bottom: 12px;
+  textarea { width: 100%; border: 2px solid #F2C4CE; border-radius: 10px; padding: 10px; font-family: 'Nunito', sans-serif; font-size: 13px; color: #7A5C4E; resize: vertical; &:focus { outline: none; border-color: #D98EA0; } }
+}
+.recusa-btns { display: flex; gap: 8px; margin-top: 10px; }
+.ver-animal-link { font-size: 12px; font-weight: 800; color: #D98EA0; text-decoration: none; display: inline-block; margin-top: 4px; &:hover { text-decoration: underline; } }
+.btn-primary { background: #D98EA0; color: #fff; border: none; padding: 11px 22px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 3px 0 #B57080; &:hover { transform: translateY(-2px); } }
+@media (max-width: 768px) { .page { padding: 32px 20px; } h1 { font-size: 28px; } }

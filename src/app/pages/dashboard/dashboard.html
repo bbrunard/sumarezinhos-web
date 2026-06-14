@@ -1,1 +1,91 @@
-<p>dashboard works!</p>
+<div class="page">
+
+  <!-- Saudação -->
+  <div class="greeting">
+    <div class="greeting-text">
+      <span class="greeting-tag">{{ isProtetor ? '🤝 Protetor' : '🏡 Adotante' }}</span>
+      <h1>Olá, <span>{{ primeiroNome }}</span>! 🐾</h1>
+      <p>{{ isProtetor
+        ? 'Gerencie seus animais e acompanhe as solicitações de adoção.'
+        : 'Acompanhe suas solicitações e encontre seu próximo amigo.' }}</p>
+    </div>
+    <div class="greeting-emoji">{{ isProtetor ? '🤝' : '🏡' }}</div>
+  </div>
+
+  <!-- Cards de resumo (protetor) -->
+  <div class="stats-grid" *ngIf="isProtetor">
+    <div class="stat-card" style="--c:#F2C4CE">
+      <div class="stat-icon">🐾</div>
+      <div class="stat-num">{{ loadingAnimais ? '...' : animais.length }}</div>
+      <div class="stat-label">Animais cadastrados</div>
+    </div>
+    <div class="stat-card" style="--c:#B8D9C0">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num">{{ loadingAnimais ? '...' : totalDisponiveis }}</div>
+      <div class="stat-label">Disponíveis</div>
+    </div>
+    <div class="stat-card" style="--c:#FAD9A1">
+      <div class="stat-icon">💌</div>
+      <div class="stat-num">{{ loadingAdocoes ? '...' : totalPendentes }}</div>
+      <div class="stat-label">Solicitações pendentes</div>
+    </div>
+    <div class="stat-card" style="--c:#C4D4F2">
+      <div class="stat-icon">🏡</div>
+      <div class="stat-num">{{ loadingAnimais ? '...' : totalAdotados }}</div>
+      <div class="stat-label">Adotados</div>
+    </div>
+  </div>
+
+  <!-- Cards de resumo (adotante) -->
+  <div class="stats-grid" *ngIf="!isProtetor">
+    <div class="stat-card" style="--c:#F2C4CE">
+      <div class="stat-icon">💌</div>
+      <div class="stat-num">{{ loadingAdocoes ? '...' : adocoes.length }}</div>
+      <div class="stat-label">Solicitações enviadas</div>
+    </div>
+    <div class="stat-card" style="--c:#FAD9A1">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-num">{{ loadingAdocoes ? '...' : totalPendentes }}</div>
+      <div class="stat-label">Aguardando resposta</div>
+    </div>
+    <div class="stat-card" style="--c:#B8D9C0">
+      <div class="stat-icon">🎉</div>
+      <div class="stat-num">{{ loadingAdocoes ? '...' : adocoes.filter(a => a.status === 'Aprovada').length }}</div>
+      <div class="stat-label">Aprovadas</div>
+    </div>
+  </div>
+
+  <!-- Atalhos -->
+  <div class="section-title">Acesso rápido</div>
+  <div class="atalhos-grid">
+    <a *ngFor="let a of atalhos" [routerLink]="a.route" class="atalho-card"
+       [style.--cor]="a.cor">
+      <span class="atalho-icon">{{ a.icon }}</span>
+      <span class="atalho-label">{{ a.label }}</span>
+    </a>
+  </div>
+
+  <!-- Últimas solicitações -->
+  <div class="section-title" *ngIf="adocoes.length > 0">
+    {{ isProtetor ? 'Solicitações recentes' : 'Minhas solicitações recentes' }}
+  </div>
+  <div class="adocoes-list" *ngIf="!loadingAdocoes && adocoes.length > 0">
+    <div class="adocao-item" *ngFor="let a of adocoes.slice(0,3)">
+      <div class="adocao-emoji">{{ a.fotoAnimal ? '' : '🐾' }}</div>
+      <div class="adocao-info">
+        <strong>{{ a.nomeAnimal }}</strong>
+        <span>{{ isProtetor ? ('por ' + a.nomeAdotante) : ('protetor: ' + a.nomeAdotante) }}</span>
+      </div>
+      <span class="adocao-badge"
+        [class.pendente]="a.status === 'Pendente'"
+        [class.aprovada]="a.status === 'Aprovada'"
+        [class.recusada]="a.status === 'Recusada'">
+        {{ a.status === 'Pendente' ? '⏳ Pendente' : a.status === 'Aprovada' ? '✅ Aprovada' : '❌ Recusada' }}
+      </span>
+    </div>
+  </div>
+  <a routerLink="/minhas-adocoes" class="ver-mais" *ngIf="adocoes.length > 0">
+    Ver todas as solicitações →
+  </a>
+
+</div>

@@ -1,1 +1,90 @@
-<p>my-adoptions works!</p>
+<div class="page">
+  <div class="page-header">
+    <span class="page-tag">💌 Solicitações</span>
+    <h1>{{ isProtetor ? 'Solicitações recebidas' : 'Minhas solicitações' }}</h1>
+    <p>{{ isProtetor
+      ? 'Aprove ou recuse as solicitações de adoção dos seus animais.'
+      : 'Acompanhe o status das suas solicitações de adoção.' }}</p>
+  </div>
+
+  <div *ngIf="loading" class="loading">💌 Carregando solicitações...</div>
+  <div *ngIf="erro" class="error-msg">⚠ {{ erro }}</div>
+
+  <!-- Estado vazio -->
+  <div class="empty" *ngIf="!loading && adocoes.length === 0">
+    <div class="empty-icon">💌</div>
+    <h2>Nenhuma solicitação ainda</h2>
+    <p *ngIf="!isProtetor">Explore os animais disponíveis e envie sua primeira solicitação!</p>
+    <p *ngIf="isProtetor">Quando alguém solicitar adoção de um animal seu, aparecerá aqui.</p>
+    <a routerLink="/animais" class="btn-primary" *ngIf="!isProtetor">Ver animais disponíveis 🐾</a>
+  </div>
+
+  <ng-container *ngIf="!loading && adocoes.length > 0">
+
+    <!-- Resumo -->
+    <div class="resumo-grid">
+      <div class="resumo-card" style="--c:#FAD9A1"><span class="r-num">{{ pendentes.length }}</span><span class="r-label">⏳ Pendentes</span></div>
+      <div class="resumo-card" style="--c:#B8D9C0"><span class="r-num">{{ aprovadas.length }}</span><span class="r-label">✅ Aprovadas</span></div>
+      <div class="resumo-card" style="--c:#F7C1C1"><span class="r-num">{{ recusadas.length }}</span><span class="r-label">❌ Recusadas</span></div>
+    </div>
+
+    <!-- Lista de solicitações -->
+    <div class="adocoes-list">
+      <div class="adocao-card" *ngFor="let a of adocoes">
+        <div class="adocao-top">
+          <div class="adocao-animal">
+            <div class="animal-thumb">🐾</div>
+            <div>
+              <strong>{{ a.nomeAnimal }}</strong>
+              <span>{{ isProtetor ? ('Solicitante: ' + a.nomeAdotante) : ('Protetor: ' + a.nomeAdotante) }}</span>
+              <small>{{ a.criadoEm | date:'dd/MM/yyyy' }}</small>
+            </div>
+          </div>
+          <span class="status-badge"
+            [class.pendente]="a.status==='Pendente'"
+            [class.aprovada]="a.status==='Aprovada'"
+            [class.recusada]="a.status==='Recusada'">
+            {{ a.status === 'Pendente' ? '⏳ Pendente' : a.status === 'Aprovada' ? '✅ Aprovada' : '❌ Recusada' }}
+          </span>
+        </div>
+
+        <div class="motivacao">
+          <span class="motivacao-label">Motivação:</span>
+          <p>{{ a.motivacao }}</p>
+        </div>
+
+        <div class="resposta-existente" *ngIf="a.mensagemResposta">
+          <span class="motivacao-label">Resposta do protetor:</span>
+          <p>{{ a.mensagemResposta }}</p>
+        </div>
+
+        <!-- Contato aprovado -->
+        <div class="contato-box" *ngIf="a.status === 'Aprovada'">
+          <span>🎉 Adoção aprovada! Entre em contato:</span>
+          <strong>{{ isProtetor ? a.telefoneAdotante : a.telefoneAdotante }}</strong>
+        </div>
+
+        <!-- Ações do protetor -->
+        <div class="acoes" *ngIf="isProtetor && a.status === 'Pendente'">
+          <button class="btn-sm aprovar" (click)="responder(a, StatusAdocao.Aprovada)">✅ Aprovar</button>
+          <button class="btn-sm recusar" (click)="toggleResposta(a.id)">❌ Recusar com mensagem</button>
+        </div>
+
+        <!-- Formulário de recusa -->
+        <div class="recusa-form" *ngIf="respondendo === a.id">
+          <textarea [(ngModel)]="mensagemResposta[a.id]"
+            placeholder="Explique o motivo da recusa (opcional)..." rows="3" maxlength="500">
+          </textarea>
+          <div class="recusa-btns">
+            <button class="btn-sm recusar" (click)="responder(a, StatusAdocao.Recusada)">Confirmar recusa</button>
+            <button class="btn-sm ghost" (click)="toggleResposta(a.id)">Cancelar</button>
+          </div>
+        </div>
+
+        <!-- Link para ver o animal -->
+        <a [routerLink]="['/animais', a.animalId]" class="ver-animal-link">Ver página do animal →</a>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

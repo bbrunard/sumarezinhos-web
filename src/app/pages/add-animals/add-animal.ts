@@ -122,12 +122,14 @@ export class AddAnimalComponent {
       next: url => {
         this.fotoUrl    = url;
         this.uploadando = false;
+        if (this.fileInput?.nativeElement) this.fileInput.nativeElement.value = '';
       },
       error: () => {
         this.erroUpload    = 'Falha no upload. Tente novamente.';
         this.fotoPreviewUrl = '';
         this.arquivoNome   = '';
         this.uploadando    = false;
+        if (this.fileInput?.nativeElement) this.fileInput.nativeElement.value = '';
       }
     });
   }

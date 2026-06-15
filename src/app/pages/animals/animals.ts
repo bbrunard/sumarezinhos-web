@@ -17,6 +17,7 @@ export class AnimalsComponent implements OnInit {
 
   animais: Animal[] = [];
   loading = true;
+  erro = '';
   filtroEspecie?: number;
   filtroPorte?: number;
   filtroSexo?: string;
@@ -47,9 +48,18 @@ export class AnimalsComponent implements OnInit {
 
   buscar() {
     this.loading = true;
+    this.erro = '';
     this.svc.listar(this.filtroEspecie, this.filtroPorte, this.filtroSexo).subscribe({
-      next: res => { if (res.sucesso) this.animais = res.dados ?? []; },
-      error: () => {},
+      next: res => {
+        if (res.sucesso) {
+          this.animais = res.dados ?? [];
+        } else {
+          console.error('API error listar:', res.mensagem);
+          this.erro = res.mensagem ?? 'Erro ao carregar animais.';
+          this.animais = [];
+        }
+      },
+      error: (err) => { console.error('Erro ao buscar animais:', err); this.erro = 'Erro ao buscar animais. Verifique o console (Network).'; this.animais = []; },
       complete: () => this.loading = false
     });
   }

@@ -188,7 +188,7 @@
           <div class="upload-icon">📷</div>
           <p class="upload-label">Clique ou arraste a foto aqui</p>
           <span class="upload-hint">JPG, PNG ou WEBP · máx. 5 MB</span>
-          <button class="btn-upload" type="button" (click)="abrirSeletor()">
+          <button class="btn-upload" type="button" (click)="$event.stopPropagation(); abrirSeletor()">
             Escolher foto
           </button>
         </div>
@@ -207,7 +207,7 @@
           <img [src]="fotoPreviewUrl" alt="Preview do animal">
           <div class="preview-overlay">
             <span class="preview-ok" *ngIf="fotoUrl">✅ Foto enviada!</span>
-            <button class="btn-trocar" type="button" (click)="abrirSeletor()">
+            <button class="btn-trocar" type="button" (click)="$event.stopPropagation(); abrirSeletor()">
               🔄 Trocar foto
             </button>
             <button class="btn-remover-foto" type="button" (click)="removerFoto()">

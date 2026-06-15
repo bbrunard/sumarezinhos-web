@@ -23,9 +23,19 @@
 
   <div *ngIf="loading" class="loading">🐾 Buscando animaizinhos...</div>
 
-  <div *ngIf="!loading && animais.length === 0" class="empty">
+  <div *ngIf="!loading && erro" class="error-msg">
+    ⚠ {{ erro }}
+    <button class="btn-ghost" (click)="buscar()">Tentar novamente</button>
+  </div>
+
+  <div *ngIf="!loading && !erro && animais.length === 0" class="empty">
     <div class="empty-icon">🔍</div>
-    <p>Nenhum animal encontrado com esses filtros.</p>
+    <h2>Nenhum animal encontrado</h2>
+    <p>Tente ajustar os filtros ou recarregar a página.</p>
+    <div class="empty-actions">
+      <button class="btn-ghost" (click)="buscar()">Recarregar</button>
+      <a routerLink="/cadastrar-animal" class="btn-primary">Cadastrar um animal</a>
+    </div>
   </div>
 
   <div class="cards-grid" *ngIf="!loading && animais.length > 0">

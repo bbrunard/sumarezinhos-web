@@ -2,7 +2,7 @@
 <section class="hero">
   <div class="hero-text">
     <span class="hero-tag">🌸 Sumaré-SP · Adoção responsável</span>
-    <h1>Encontre seu<br><span class="highlight">amiguinho</span><br>perfeito!</h1>
+    <h1>Encontre seu<br><span class="highlight">amiginho</span><br>perfeito!</h1>
     <p class="hero-sub">Conectamos protetores independentes e ONGs de Sumaré com famílias que querem dar um lar cheio de amor para um bichinho especial. 🐶🐱</p>
     <div class="hero-btns">
       <a routerLink="/animais" class="btn-primary">Ver animais disponíveis 🐾</a>
@@ -37,11 +37,32 @@
     <h2>Animaizinhos esperando por você</h2>
     <p>Conheça alguns dos peludinhos que estão aguardando um lar!</p>
   </div>
-  <div *ngIf="loading" class="loading-paws">🐾 Carregando...</div>
-  <div class="cards-grid" *ngIf="!loading">
+
+  <!-- Carregando -->
+  <div class="state-box" *ngIf="loading">
+    <div class="state-spinner">🐾</div>
+    <p>Buscando animaizinhos...</p>
+  </div>
+
+  <!-- Erro de conexão -->
+  <div class="state-box error" *ngIf="!loading && erro">
+    <div class="state-icon">😿</div>
+    <p>{{ erro }}</p>
+    <button class="btn-retry" (click)="ngOnInit()">Tentar novamente</button>
+  </div>
+
+  <!-- Vazio -->
+  <div class="state-box" *ngIf="!loading && !erro && animaisDestaque.length === 0">
+    <div class="state-icon">🔍</div>
+    <p>Nenhum animal disponível no momento.<br>Volte em breve!</p>
+  </div>
+
+  <!-- Grid de cards -->
+  <div class="cards-grid" *ngIf="!loading && !erro && animaisDestaque.length > 0">
     <app-animal-card *ngFor="let a of animaisDestaque" [animal]="a" />
   </div>
-  <div class="sec-footer">
+
+  <div class="sec-footer" *ngIf="!loading && !erro">
     <a routerLink="/animais" class="btn-primary">Ver todos os animais 🐾</a>
   </div>
 </section>
@@ -80,7 +101,7 @@
   </div>
 </section>
 
-<!-- CTA FINAL -->
+<!-- CTA -->
 <section class="cta-sec">
   <h2>Pronto para mudar uma vida? 🐾</h2>
   <p>Cadastre-se gratuitamente e faça parte dessa corrente do bem em Sumaré!</p>

@@ -1,11 +1,22 @@
 <div class="page">
 
-  <div *ngIf="loading" class="loading">👤 Carregando perfil...</div>
-  <div *ngIf="erro && !loading" class="error-msg">⚠ {{ erro }}</div>
+  <!-- Carregando -->
+  <div class="state-box" *ngIf="loading">
+    <div class="state-spinner">👤</div>
+    <p>Carregando seu perfil...</p>
+  </div>
 
+  <!-- Erro de carregamento -->
+  <div class="state-box error" *ngIf="!loading && erro && !usuario">
+    <div class="state-icon">😿</div>
+    <p>{{ erro }}</p>
+    <button class="btn-retry" (click)="ngOnInit()">Tentar novamente</button>
+  </div>
+
+  <!-- Conteúdo do perfil -->
   <ng-container *ngIf="!loading && usuario">
 
-    <!-- Card de perfil -->
+    <!-- Hero -->
     <div class="profile-hero">
       <div class="avatar">{{ inicial }}</div>
       <div class="profile-info">
@@ -14,27 +25,30 @@
         <p>{{ usuario.email }}</p>
       </div>
       <div class="hero-actions">
-        <button class="btn-edit" (click)="editando = true" *ngIf="!editando">✏️ Editar perfil</button>
+        <button class="btn-edit" (click)="editando = true; sucesso = ''" *ngIf="!editando">
+          ✏️ Editar perfil
+        </button>
         <button class="btn-logout" (click)="logout()">Sair</button>
       </div>
     </div>
 
-    <!-- Atalhos rápidos -->
+    <!-- Atalhos -->
     <div class="quick-links">
-      <a routerLink="/dashboard" class="qlink">📊 Dashboard</a>
-      <a routerLink="/meus-animais" class="qlink" *ngIf="isProtetor">🐾 Meus animais</a>
-      <a routerLink="/minhas-adocoes" class="qlink">💌 Solicitações</a>
+      <a routerLink="/dashboard"        class="qlink">📊 Dashboard</a>
+      <a routerLink="/meus-animais"     class="qlink" *ngIf="isProtetor">🐾 Meus animais</a>
+      <a routerLink="/minhas-adocoes"   class="qlink">💌 Solicitações</a>
       <a routerLink="/cadastrar-animal" class="qlink" *ngIf="isProtetor">➕ Cadastrar animal</a>
-      <a routerLink="/animais" class="qlink" *ngIf="!isProtetor">🔍 Ver animais</a>
+      <a routerLink="/animais"          class="qlink" *ngIf="!isProtetor">🔍 Ver animais</a>
     </div>
 
-    <!-- Dados do perfil -->
-    <div class="profile-card">
-      <div class="card-header">
-        <h2>Dados pessoais</h2>
-      </div>
+    <!-- Sucesso fora do formulário -->
+    <div class="success-msg outside" *ngIf="sucesso && !editando">✅ {{ sucesso }}</div>
 
-      <!-- Modo visualização -->
+    <!-- Card de dados -->
+    <div class="profile-card">
+      <h2>Dados pessoais</h2>
+
+      <!-- Visualização -->
       <ng-container *ngIf="!editando">
         <div class="data-grid">
           <div class="data-item">
@@ -60,7 +74,7 @@
         </div>
       </ng-container>
 
-      <!-- Modo edição -->
+      <!-- Edição -->
       <ng-container *ngIf="editando">
         <div class="edit-form">
           <div class="field">
@@ -91,15 +105,11 @@
           </div>
         </div>
       </ng-container>
-
     </div>
-
-    <!-- Mensagem de sucesso fora do modo edição -->
-    <div class="success-msg outside" *ngIf="sucesso && !editando">✅ {{ sucesso }}</div>
 
     <!-- Zona de perigo -->
     <div class="danger-zone">
-      <h3>Zona de perigo</h3>
+      <h3>Encerrar sessão</h3>
       <p>Ao sair, você precisará fazer login novamente para acessar sua conta.</p>
       <button class="btn-logout-full" (click)="logout()">Sair da conta</button>
     </div>

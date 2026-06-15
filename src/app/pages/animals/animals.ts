@@ -16,51 +16,56 @@ export class AnimalsComponent implements OnInit {
   private svc = inject(AnimalService);
 
   animais: Animal[] = [];
-  loading = true;
-  erro = '';
+  loading  = true;
+  erro     = '';
+
   filtroEspecie?: number;
-  filtroPorte?: number;
-  filtroSexo?: string;
+  filtroPorte?:   number;
+  filtroSexo?:    string;
+  filtroAtivo = 0;
 
   filtros = [
-    { label: '🐾 Todos', especie: undefined },
-    { label: '🐶 Cães', especie: EspecieAnimal.Cao },
-    { label: '🐱 Gatos', especie: EspecieAnimal.Gato },
-    { label: '🐇 Outros', especie: EspecieAnimal.Outro }
+    { label: '🐾 Todos',  especie: undefined             },
+    { label: '🐶 Cães',   especie: EspecieAnimal.Cao     },
+    { label: '🐱 Gatos',  especie: EspecieAnimal.Gato    },
+    { label: '🐇 Outros', especie: EspecieAnimal.Outro   }
   ];
 
   portes = [
-    { label: 'Qualquer porte', value: undefined },
-    { label: '🔹 Pequeno', value: PorteAnimal.Pequeno },
-    { label: '🔸 Médio', value: PorteAnimal.Medio },
-    { label: '🔶 Grande', value: PorteAnimal.Grande }
+    { label: 'Qualquer porte', value: undefined           },
+    { label: '🔹 Pequeno',     value: PorteAnimal.Pequeno },
+    { label: '🔸 Médio',       value: PorteAnimal.Medio   },
+    { label: '🔶 Grande',      value: PorteAnimal.Grande  }
   ];
 
-  filtroAtivo = 0;
+  ngOnInit(): void { this.buscar(); }
 
-  ngOnInit() { this.buscar(); }
-
-  setEspecie(i: number, especie?: number) {
-    this.filtroAtivo = i;
+  setEspecie(i: number, especie?: number): void {
+    this.filtroAtivo   = i;
     this.filtroEspecie = especie;
     this.buscar();
   }
 
-  buscar() {
+  buscar(): void {
     this.loading = true;
-    this.erro = '';
-    this.svc.listar(this.filtroEspecie, this.filtroPorte, this.filtroSexo).subscribe({
+    this.erro    = '';
+    this.animais = [];
+
+    this.animalSvc.listar(this.filtroEspecie, this.filtroPorte, this.filtroSexo).subscribe({
       next: res => {
-        if (res.sucesso) {
-          this.animais = res.dados ?? [];
+        if (res.sucesso && res.dados) {
+          this.animais = res.dados;
         } else {
-          console.error('API error listar:', res.mensagem);
-          this.erro = res.mensagem ?? 'Erro ao carregar animais.';
-          this.animais = [];
+          this.erro = res.mensagem ?? 'Erro ao buscar animais.';
         }
+        this.loading = false;
       },
-      error: (err) => { console.error('Erro ao buscar animais:', err); this.erro = 'Erro ao buscar animais. Verifique o console (Network).'; this.animais = []; },
-      complete: () => this.loading = false
+      error: () => {
+        this.erro    = 'Não foi possível conectar à API. Verifique sua conexão.';
+        this.loading = false;
+      }
     });
   }
+
+  get animalSvc() { return this.svc; }
 }

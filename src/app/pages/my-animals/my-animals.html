@@ -10,20 +10,29 @@
     </div>
   </div>
 
-  <div *ngIf="loading" class="loading">🐾 Carregando seus animais...</div>
-  <div *ngIf="erro" class="error-msg">⚠ {{ erro }}</div>
+  <!-- Carregando -->
+  <div class="state-box" *ngIf="loading">
+    <div class="state-spinner">🐾</div>
+    <p>Carregando seus animais...</p>
+  </div>
 
-  <!-- Estado vazio -->
-  <div class="empty" *ngIf="!loading && animais.length === 0">
+  <!-- Erro -->
+  <div class="state-box error" *ngIf="!loading && erro">
+    <div class="state-icon">😿</div>
+    <p>{{ erro }}</p>
+    <button class="btn-retry" (click)="carregar()">Tentar novamente</button>
+  </div>
+
+  <!-- Vazio -->
+  <div class="empty" *ngIf="!loading && !erro && animais.length === 0">
     <div class="empty-icon">🐾</div>
     <h2>Nenhum animal cadastrado ainda</h2>
     <p>Cadastre o primeiro animal e ajude a encontrar um lar cheio de amor!</p>
     <a routerLink="/cadastrar-animal" class="btn-primary">Cadastrar primeiro animal</a>
   </div>
 
-  <ng-container *ngIf="!loading && animais.length > 0">
-
-    <!-- Resumo -->
+  <!-- Conteúdo -->
+  <ng-container *ngIf="!loading && !erro && animais.length > 0">
     <div class="resumo-grid">
       <div class="resumo-card" style="--c:#B8D9C0">
         <span class="r-num">{{ disponiveis.length }}</span>
@@ -39,37 +48,36 @@
       </div>
     </div>
 
-    <!-- Lista de animais -->
     <div class="animals-list">
       <div class="animal-row" *ngFor="let a of animais">
-        <div class="animal-emoji" [style.background]="a.especie==='Cao'?'#FFF8E0':a.especie==='Gato'?'#FFF0F5':'#F0FFF0'">
-          {{ a.especie === 'Cao' ? '🐶' : a.especie === 'Gato' ? '🐱' : '🐇' }}
-        </div>
+        <div class="animal-emoji" [style.background]="bgDe(a)">{{ emojiDe(a) }}</div>
         <div class="animal-info">
           <strong>{{ a.nome }}</strong>
           <span>{{ a.especie === 'Cao' ? 'Cão' : a.especie }} · {{ a.porte }} · {{ a.sexo === 'M' ? 'Macho' : 'Fêmea' }}</span>
         </div>
         <span class="status-badge"
-          [class.disponivel]="a.status==='Disponivel'"
-          [class.reservado]="a.status==='Reservado'"
-          [class.adotado]="a.status==='Adotado'">
+          [class.disponivel]="a.status === 'Disponivel'"
+          [class.reservado]="a.status === 'Reservado'"
+          [class.adotado]="a.status === 'Adotado'">
           {{ a.status === 'Disponivel' ? '✅ Disponível' : a.status === 'Reservado' ? '⏳ Reservado' : '🏡 Adotado' }}
         </span>
         <div class="animal-actions">
           <a [routerLink]="['/animais', a.id]" class="btn-sm ghost">Ver</a>
-          <button class="btn-sm danger"
-            *ngIf="confirmandoId !== a.id"
-            (click)="confirmarRemocao(a.id)"
-            [disabled]="removendo === a.id">
-            {{ removendo === a.id ? '...' : 'Remover' }}
-          </button>
+
+          <ng-container *ngIf="confirmandoId !== a.id">
+            <button class="btn-sm danger"
+              (click)="confirmarRemocao(a.id)"
+              [disabled]="removendo === a.id">
+              {{ removendo === a.id ? '...' : 'Remover' }}
+            </button>
+          </ng-container>
+
           <ng-container *ngIf="confirmandoId === a.id">
             <button class="btn-sm danger" (click)="remover(a.id)">Confirmar</button>
-            <button class="btn-sm ghost" (click)="cancelarRemocao()">Cancelar</button>
+            <button class="btn-sm ghost"  (click)="cancelarRemocao()">Cancelar</button>
           </ng-container>
         </div>
       </div>
     </div>
-
   </ng-container>
 </div>

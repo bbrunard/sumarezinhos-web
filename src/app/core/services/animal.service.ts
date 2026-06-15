@@ -11,11 +11,17 @@ export class AnimalService {
 
   constructor(private http: HttpClient) {}
 
-  listar(especie?: number, porte?: number, sexo?: string, apenasDisponiveis = true): Observable<ApiResponse<Animal[]>> {
-    let params = new HttpParams().set('apenasDisponiveis', apenasDisponiveis);
-    if (especie) params = params.set('especie', especie);
-    if (porte)   params = params.set('porte', porte);
-    if (sexo)    params = params.set('sexo', sexo);
+  listar(
+    especie?: number,
+    porte?: number,
+    sexo?: string,
+    apenasDisponiveis = true
+  ): Observable<ApiResponse<Animal[]>> {
+    let params = new HttpParams();
+    params = params.set('apenasDisponiveis', String(apenasDisponiveis));
+    if (especie != null) params = params.set('especie', String(especie));
+    if (porte   != null) params = params.set('porte',   String(porte));
+    if (sexo)            params = params.set('sexo',    sexo);
     return this.http.get<ApiResponse<Animal[]>>(this.url, { params });
   }
 

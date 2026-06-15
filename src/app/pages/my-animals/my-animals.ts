@@ -14,46 +14,66 @@ import { Animal } from '../../core/models/animal.model';
 export class MyAnimalsComponent implements OnInit {
   private svc = inject(AnimalService);
 
-  animais: Animal[] = [];
-  loading  = true;
-  erro     = '';
-  removendo: string | null = null;
+  animais:       Animal[] = [];
+  loading        = true;
+  erro           = '';
+  removendo:     string | null = null;
   confirmandoId: string | null = null;
 
   get disponiveis() { return this.animais.filter(a => a.status === 'Disponivel'); }
-  get reservados()  { return this.animais.filter(a => a.status === 'Reservado'); }
-  get adotados()    { return this.animais.filter(a => a.status === 'Adotado'); }
+  get reservados()  { return this.animais.filter(a => a.status === 'Reservado');  }
+  get adotados()    { return this.animais.filter(a => a.status === 'Adotado');    }
 
-  get emoji() {
-    return (a: Animal) => ({ Cao: '🐶', Gato: '🐱', Outro: '🐇' }[a.especie] ?? '🐾');
+  emojiDe(a: Animal): string {
+    return ({ Cao: '🐶', Gato: '🐱', Outro: '🐇' } as Record<string, string>)[a.especie] ?? '🐾';
   }
 
-  ngOnInit() {
-    this.carregar();
+  bgDe(a: Animal): string {
+    return ({ Cao: '#FFF8E0', Gato: '#FFF0F5', Outro: '#F0FFF0' } as Record<string, string>)[a.especie] ?? '#FDF6EC';
   }
 
-  carregar() {
+  ngOnInit(): void { this.carregar(); }
+
+  carregar(): void {
     this.loading = true;
+    this.erro    = '';
+
     this.svc.meusAnimais().subscribe({
-      next: r => { if (r.sucesso) this.animais = r.dados ?? []; else this.erro = r.mensagem; },
-      error: () => { this.erro = 'Erro ao carregar animais.'; this.loading = false; },
-      complete: () => this.loading = false
+      next: r => {
+        if (r.sucesso && r.dados != null) {
+          this.animais = r.dados;
+        } else {
+          this.erro = r.mensagem ?? 'Erro ao carregar animais.';
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.erro    = 'Não foi possível conectar à API. Verifique sua conexão.';
+        this.loading = false;
+      }
     });
   }
 
-  confirmarRemocao(id: string) { this.confirmandoId = id; }
-  cancelarRemocao()             { this.confirmandoId = null; }
+  confirmarRemocao(id: string): void { this.confirmandoId = id; }
+  cancelarRemocao():               void { this.confirmandoId = null; }
 
-  remover(id: string) {
-    this.removendo = id;
+  remover(id: string): void {
+    this.removendo     = id;
     this.confirmandoId = null;
+
     this.svc.remover(id).subscribe({
       next: r => {
-        if (r.sucesso) this.animais = this.animais.filter(a => a.id !== id);
-        else this.erro = r.mensagem;
+        if (r.sucesso) {
+          this.animais = this.animais.filter(a => a.id !== id);
+        } else {
+          this.erro = r.mensagem ?? 'Erro ao remover animal.';
+        }
+        this.removendo = null;
       },
-      error: () => { this.erro = 'Erro ao remover animal.'; },
-      complete: () => this.removendo = null
+      error: () => {
+        this.erro      = 'Erro ao remover animal. Tente novamente.';
+        this.removendo = null;
+      }
     });
   }
 }

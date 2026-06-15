@@ -14,17 +14,16 @@ import { EspecieAnimal, PorteAnimal } from '../../core/models/animal.model';
   styleUrls: ['./add-animal.scss']
 })
 export class AddAnimalComponent {
-  private animalSvc  = inject(AnimalService);
-  private uploadSvc  = inject(UploadService);
-  private router     = inject(Router);
+  private animalSvc = inject(AnimalService);
+  private uploadSvc = inject(UploadService);
+  private router    = inject(Router);
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  // Enums para o template
   EspecieAnimal = EspecieAnimal;
   PorteAnimal   = PorteAnimal;
 
-  // Campos do formulário
+  // Campos
   nome       = '';
   especie: EspecieAnimal = EspecieAnimal.Cao;
   porte: PorteAnimal     = PorteAnimal.Pequeno;
@@ -34,12 +33,13 @@ export class AddAnimalComponent {
   vacinado   = false;
   descricao  = '';
 
-  // Upload de imagem
-  fotoUrl        = '';
-  fotoPreviewUrl = '';
-  uploadando     = false;
-  erroUpload     = '';
-  arquivoNome    = '';
+  // Upload — controle de estado para evitar duplo disparo
+  fotoUrl         = '';
+  fotoPreviewUrl  = '';
+  uploadando      = false;
+  erroUpload      = '';
+  arquivoNome     = '';
+  private _processando = false;   // ← trava para evitar upload duplo
 
   // Estado geral
   loading  = false;
@@ -50,15 +50,15 @@ export class AddAnimalComponent {
   etapa       = 1;
   totalEtapas = 3;
 
-  get progressoPct()   { return Math.round((this.etapa / this.totalEtapas) * 100); }
-  get etapa1Valida()   { return this.nome.trim().length >= 2 && !!this.especie && !!this.porte; }
-  get etapa2Valida()   { return !!this.sexo && this.idadeMeses >= 0; }
-  get etapa3Valida()   { return this.descricao.trim().length >= 20; }
+  get progressoPct() { return Math.round((this.etapa / this.totalEtapas) * 100); }
+  get etapa1Valida() { return this.nome.trim().length >= 2 && !!this.especie && !!this.porte; }
+  get etapa2Valida() { return !!this.sexo && this.idadeMeses >= 0; }
+  get etapa3Valida() { return this.descricao.trim().length >= 20; }
 
   get emojiEspecie(): string {
     const m: Record<number, string> = {
-      [EspecieAnimal.Cao]: '🐶',
-      [EspecieAnimal.Gato]: '🐱',
+      [EspecieAnimal.Cao]:   '🐶',
+      [EspecieAnimal.Gato]:  '🐱',
       [EspecieAnimal.Outro]: '🐇'
     };
     return m[this.especie] ?? '🐾';
@@ -67,40 +67,42 @@ export class AddAnimalComponent {
   avancar() { if (this.etapa < this.totalEtapas) this.etapa++; }
   voltar()  { if (this.etapa > 1) this.etapa--; }
 
-  decrementarIdade() {
-    if (this.idadeMeses > 0) {
-      this.idadeMeses--;
-    }
+  decrementarIdade(): void {
+    if (this.idadeMeses > 0) this.idadeMeses--;
   }
 
-  incrementarIdade() {
-    if (this.idadeMeses < 300) {
-      this.idadeMeses++;
-    }
+  incrementarIdade(): void {
+    if (this.idadeMeses < 300) this.idadeMeses++;
   }
 
-  // ─── Upload ───────────────────────────────────────────────────────
-  abrirSeletor() {
+  // ─── Upload ────────────────────────────────────────────────────
+  abrirSeletor(): void {
+    // Reseta o valor para permitir selecionar o mesmo arquivo novamente
+    if (this.fileInput?.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
     this.fileInput.nativeElement.click();
   }
 
-  onArquivoArrastado(event: DragEvent) {
-    event.preventDefault();
-    const file = event.dataTransfer?.files?.[0];
-    if (!file) return;
-    this.processarArquivo(file);
-  }
-
-  onArquivoSelecionado(event: Event) {
+  onArquivoSelecionado(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file  = input.files?.[0];
     if (!file) return;
     this.processarArquivo(file);
   }
 
-  private processarArquivo(file: File) {
-    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!tiposPermitidos.includes(file.type)) {
+  onArquivoArrastado(event: DragEvent): void {
+    event.preventDefault();
+    const file = event.dataTransfer?.files?.[0];
+    if (!file) return;
+    this.processarArquivo(file);
+  }
+
+  private processarArquivo(file: File): void {
+    if (this._processando) return;
+
+    const tiposOk = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!tiposOk.includes(file.type)) {
       this.erroUpload = 'Formato inválido. Use JPG, PNG ou WEBP.';
       return;
     }
@@ -110,43 +112,48 @@ export class AddAnimalComponent {
     }
 
     const reader = new FileReader();
-    reader.onload = e => this.fotoPreviewUrl = e.target?.result as string;
+    reader.onload = e => { this.fotoPreviewUrl = e.target?.result as string; };
     reader.readAsDataURL(file);
 
-    this.arquivoNome = file.name;
-    this.erroUpload  = '';
-    this.uploadando  = true;
-    this.fotoUrl     = '';
+    this.arquivoNome    = file.name;
+    this.erroUpload     = '';
+    this.uploadando     = true;
+    this.fotoUrl        = '';
+    this._processando   = true;
 
     this.uploadSvc.uploadImagem(file).subscribe({
       next: url => {
-        this.fotoUrl    = url;
-        this.uploadando = false;
+        this.fotoUrl      = url;
+        this.uploadando   = false;
+        this._processando = false;
         if (this.fileInput?.nativeElement) this.fileInput.nativeElement.value = '';
       },
       error: () => {
-        this.erroUpload    = 'Falha no upload. Tente novamente.';
+        this.erroUpload     = 'Falha no upload. Tente novamente.';
         this.fotoPreviewUrl = '';
-        this.arquivoNome   = '';
-        this.uploadando    = false;
+        this.arquivoNome    = '';
+        this.uploadando     = false;
+        this._processando   = false;
         if (this.fileInput?.nativeElement) this.fileInput.nativeElement.value = '';
       }
     });
   }
 
-  removerFoto() {
+  removerFoto(): void {
     this.fotoUrl        = '';
     this.fotoPreviewUrl = '';
     this.arquivoNome    = '';
     this.erroUpload     = '';
+    this._processando   = false;
     if (this.fileInput?.nativeElement) {
       this.fileInput.nativeElement.value = '';
     }
   }
 
-  // ─── Salvar ───────────────────────────────────────────────────────
-  salvar() {
-    if (!this.etapa3Valida || this.uploadando) return;
+  // ─── Salvar ────────────────────────────────────────────────────
+  salvar(): void {
+    if (!this.etapa3Valida || this.uploadando || this.loading) return;
+
     this.loading = true;
     this.erro    = '';
     this.sucesso = '';
@@ -167,14 +174,14 @@ export class AddAnimalComponent {
           this.sucesso = '🎉 Animal cadastrado com sucesso! Redirecionando...';
           setTimeout(() => this.router.navigate(['/meus-animais']), 1800);
         } else {
-          this.erro = res.mensagem ?? 'Erro ao cadastrar animal.';
+          this.erro    = res.mensagem ?? 'Erro ao cadastrar animal.';
+          this.loading = false;
         }
       },
       error: () => {
         this.erro    = 'Erro de conexão. Verifique sua internet e tente novamente.';
         this.loading = false;
-      },
-      complete: () => this.loading = false
+      }
     });
   }
 }

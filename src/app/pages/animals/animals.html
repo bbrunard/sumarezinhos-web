@@ -5,6 +5,7 @@
     <p>Filtre por tipo, porte ou sexo e encontre o seu match perfeito!</p>
   </div>
 
+  <!-- Filtros -->
   <div class="filters-row">
     <button *ngFor="let f of filtros; let i = index"
       class="filter-btn" [class.active]="filtroAtivo === i"
@@ -21,24 +22,30 @@
     </select>
   </div>
 
-  <div *ngIf="loading" class="loading">🐾 Buscando animaizinhos...</div>
-
-  <div *ngIf="!loading && erro" class="error-msg">
-    ⚠ {{ erro }}
-    <button class="btn-ghost" (click)="buscar()">Tentar novamente</button>
+  <!-- Carregando -->
+  <div class="state-box" *ngIf="loading">
+    <div class="state-spinner">🐾</div>
+    <p>Buscando animaizinhos...</p>
   </div>
 
-  <div *ngIf="!loading && !erro && animais.length === 0" class="empty">
-    <div class="empty-icon">🔍</div>
-    <h2>Nenhum animal encontrado</h2>
-    <p>Tente ajustar os filtros ou recarregar a página.</p>
-    <div class="empty-actions">
-      <button class="btn-ghost" (click)="buscar()">Recarregar</button>
-      <a routerLink="/cadastrar-animal" class="btn-primary">Cadastrar um animal</a>
-    </div>
+  <!-- Erro -->
+  <div class="state-box error" *ngIf="!loading && erro">
+    <div class="state-icon">😿</div>
+    <p>{{ erro }}</p>
+    <button class="btn-retry" (click)="buscar()">Tentar novamente</button>
   </div>
 
-  <div class="cards-grid" *ngIf="!loading && animais.length > 0">
+  <!-- Vazio -->
+  <div class="state-box" *ngIf="!loading && !erro && animais.length === 0">
+    <div class="state-icon">🔍</div>
+    <p>Nenhum animal encontrado com esses filtros.<br>Tente remover alguns filtros!</p>
+    <button class="btn-retry" (click)="filtroAtivo=0; filtroEspecie=undefined; filtroPorte=undefined; filtroSexo=undefined; buscar()">
+      Limpar filtros
+    </button>
+  </div>
+
+  <!-- Grid -->
+  <div class="cards-grid" *ngIf="!loading && !erro && animais.length > 0">
     <app-animal-card *ngFor="let a of animais" [animal]="a" />
   </div>
 </div>

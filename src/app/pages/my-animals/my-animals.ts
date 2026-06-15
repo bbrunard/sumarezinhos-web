@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 import { AnimalService } from '../../core/services/animal.service';
 import { Animal } from '../../core/models/animal.model';
 
@@ -38,20 +39,22 @@ export class MyAnimalsComponent implements OnInit {
     this.loading = true;
     this.erro    = '';
 
-    this.svc.meusAnimais().subscribe({
-      next: r => {
-        if (r.sucesso && r.dados != null) {
-          this.animais = r.dados;
-        } else {
-          this.erro = r.mensagem ?? 'Erro ao carregar animais.';
+    this.svc.meusAnimais()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: r => {
+          console.debug('my-animals carregar response', r);
+          if (r.sucesso) {
+            this.animais = r.dados ?? [];
+          } else {
+            this.erro = r.mensagem ?? 'Erro ao carregar animais.';
+          }
+        },
+        error: err => {
+          console.error('Erro ao carregar meus animais:', err);
+          this.erro = 'Não foi possível conectar à API. Verifique sua conexão.';
         }
-        this.loading = false;
-      },
-      error: () => {
-        this.erro    = 'Não foi possível conectar à API. Verifique sua conexão.';
-        this.loading = false;
-      }
-    });
+      });
   }
 
   confirmarRemocao(id: string): void { this.confirmandoId = id; }

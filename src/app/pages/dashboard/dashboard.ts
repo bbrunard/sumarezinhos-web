@@ -49,7 +49,11 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     if (this.isProtetor) {
       this.animalSvc.meusAnimais().subscribe({
-        next: r => { if (r.sucesso) this.animais = r.dados ?? []; },
+        next: r => {
+          console.log('RESPOSTA RECEBIDAS', r);
+          console.log('DADOS RECEBIDAS', r.dados);
+
+          if (r.sucesso) this.animais = r.dados ?? []; },
         complete: () => this.loadingAnimais = false
       });
       this.adocaoSvc.recebidas().subscribe({
